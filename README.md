@@ -1,8 +1,4 @@
-# react-querybuilder
-
-[![npm](https://img.shields.io/npm/v/react-querybuilder.svg?maxAge=2592000)](https://www.npmjs.com/package/react-querybuilder)
-[![Build Status](https://travis-ci.org/sapientglobalmarkets/react-querybuilder.svg?branch=master)](https://travis-ci.org/sapientglobalmarkets/react-querybuilder)
-[![codecov.io](https://codecov.io/github/sapientglobalmarkets/react-querybuilder/coverage.svg?branch=master)](https://codecov.io/github/sapientglobalmarkets/react-querybuilder?branch=master)
+# react-query-builder-semantic
 
 ## Credits
 This component was inspired by prior work from:
@@ -10,27 +6,20 @@ This component was inspired by prior work from:
 - [jQuery QueryBuilder](http://querybuilder.js.org/)
 - [Angular QueryBuilder](https://github.com/mfauveau/angular-query-builder)
 
+Thanks to [sapientglobalmarkets](https://github.com/sapientglobalmarkets/react-querybuilder) for providing us this component's code base <br/>
+Thanks to [coryhouse](https://github.com/coryhouse/ps-react) for providing the medium for documentation and deployment
 
 ## Getting Started
 
-![Screenshot](_assets/screenshot.png)
-
 ```shell
-npm install react-querybuilder --save
+npm install react-query-builder-semantic --save
 ```
-## Demo
-
-Open `<path-to-project>/node_modules/react-querybuilder/demo/index.html` in your browser.
-
-OR
-
-[See live Demo](https://sapientglobalmarkets.github.io/react-querybuilder/).
-
+## Documentation
 
 ## Usage
 
 ```jsx
-import QueryBuilder from 'react-querybuilder';
+import QueryBuilder from 'react-query-builder-semantic';
 
 const fields = [
     {name: 'firstName', label: 'First Name'},

@@ -1,81 +1,186 @@
 {
-  "name": "react-querybuilder",
-  "version": "1.4.2",
-  "description": "The React <QueryBuilder /> component for constructing queries",
-  "main": "dist/index.js",
-  "types": "./index.d.ts",
+  "name": "react-query-builder-semantic",
+  "version": "0.1.43",
+  "main": "./lib/index.js",
+  "readme": "README.md",
   "repository": {
     "type": "git",
-    "url": "https://github.com/sapientglobalmarkets/react-querybuilder"
+    "url": "https://github.com/RebelOpSys/react-query-builder-semantic"
   },
-  "keywords": [
-    "react",
-    "query",
-    "builder",
-    "operators",
-    "ui",
-    "component"
+  "author": {
+    "name": "Trixta",
+    "email": "developer@trixta.com",
+    "url": "http://trixta.com/"
+  },
+  "contributors": [
+    "Jacques Nel"
   ],
-  "author": "Pavan Podila <pavan@pixelingene.com> (http://blog.pixelingene.com)",
   "license": "MIT",
-  "homepage": "https://github.com/sapientglobalmarkets/react-querybuilder",
-  "devDependencies": {
-    "babel-core": "^6.26.0",
-    "babel-loader": "^7.1.2",
-    "babel-plugin-__coverage__": "^11.0.0",
-    "babel-preset-env": "^1.6.1",
-    "babel-preset-react": "^6.24.1",
-    "babel-preset-stage-1": "^6.24.1",
-    "chai": "^4.1.2",
-    "codecov.io": "^0.1.6",
-    "copy-webpack-plugin": "^4.2.3",
-    "css-loader": "^0.28.7",
-    "del-cli": "^1.1.0",
-    "enzyme": "^3.2.0",
-    "enzyme-adapter-react-16": "^1.1.0",
-    "extract-text-webpack-plugin": "^3.0.2",
-    "gh-pages": "^1.1.0",
-    "github-changes": "^1.1.1",
-    "html-webpack-plugin": "^2.30.1",
-    "karma": "^1.7.1",
-    "karma-chai": "^0.1.0",
-    "karma-coverage": "^1.1.1",
-    "karma-es6-shim": "^1.0.0",
-    "karma-mocha": "^1.3.0",
-    "karma-mocha-reporter": "^2.2.5",
-    "karma-phantomjs-launcher": "^1.0.4",
-    "karma-sourcemap-loader": "^0.3.7",
-    "karma-webpack": "^2.0.6",
-    "mocha": "^4.0.1",
-    "node-sass": "^4.7.2",
-    "phantomjs-prebuilt": "^2.1.16",
-    "postcss-cssnext": "^3.0.2",
-    "postcss-loader": "^2.0.9",
-    "react-addons-test-utils": "^15.6.2",
-    "sass-loader": "^6.0.3",
-    "sinon": "^4.4.8",
-    "webpack": "^3.10.0",
-    "webpack-dev-server": "^2.9.7",
-    "webpack-merge": "^4.1.1"
+  "bugs": {
+    "url": "https://github.com/RebelOpSys/react-query-builder-semantic/issues"
   },
+  "engines": {
+    "node": ">=4.0.0"
+  },
+  "files": [
+    "lib"
+  ],
+  "keywords": [
+    "component",
+    "react",
+    "react-component",
+    "react-query-builder",
+    "react-semantic-ui"
+  ],
   "dependencies": {
-    "lodash": "^4.17.4",
+    "classnames": "^2.2.5",
+    "clone": "^2.1.1",
+    "immutable": "^3.7.6",
+    "json-stringify-safe": "^5.0.1",
+    "lodash": "^4.6",
+    "moment": "^2.12.0",
     "prop-types": "^15.6.0",
     "react": "^16.2.0",
+    "react-addons-css-transition-group": "^15.0.0",
+    "react-addons-pure-render-mixin": "^15.0.0",
+    "react-addons-shallow-compare": "^15.0.0",
     "react-dom": "^16.2.0",
-    "uuid": "^3.0.1"
+    "react-redux": "^5.0.0",
+    "redux": "^3.7.2",
+    "shortid": "2.2.13",
+    "transit-immutable-js": "^0.7.0",
+    "transit-js": "^0.8.846"
   },
   "peerDependencies": {
     "react": "^16.2.0",
-    "react-dom": "^16.2.0"
+    "react-dom": "^16.2.0",
+    "react-redux": "^5.0.0",
+    "react-addons-css-transition-group": "^0.14.6 || ^15.0.0",
+    "react-addons-pure-render-mixin": "^0.14.6 || ^15.0.0",
+    "react-addons-shallow-compare": "^0.14.7 || ^15.0.0",
+    "redux": "^3.7.2"
   },
+  "devDependencies": {
+    "autoprefixer": "7.1.6",
+    "babel-cli": "^6.26.0",
+    "babel-core": "6.26.0",
+    "babel-eslint": "7.2.3",
+    "babel-jest": "20.0.3",
+    "babel-loader": "7.1.2",
+    "babel-preset-react-app": "^3.1.2",
+    "babel-runtime": "6.26.0",
+    "case-sensitive-paths-webpack-plugin": "2.1.1",
+    "chalk": "1.1.3",
+    "chokidar": "^1.7.0",
+    "cpx": "^1.5.0",
+    "cross-env": "^4.0.0",
+    "css-loader": "0.28.7",
+    "dotenv": "4.0.0",
+    "dotenv-expand": "4.2.0",
+    "enzyme": "3.2.0",
+    "enzyme-adapter-react-16": "^1.1.0",
+    "eslint": "4.10.0",
+    "eslint-config-react-app": "^2.1.0",
+    "eslint-loader": "1.9.0",
+    "eslint-plugin-flowtype": "2.39.1",
+    "eslint-plugin-import": "2.8.0",
+    "eslint-plugin-jsx-a11y": "5.1.1",
+    "eslint-plugin-react": "7.4.0",
+    "extract-text-webpack-plugin": "3.0.2",
+    "file-loader": "1.1.5",
+    "gh-pages": "1.1.0",
+    "prismjs": "^1.6.0",
+    "json-loader": "0.5.7",
+    "npm-run-all": "4.1.2",
+    "fs-extra": "3.0.1",
+    "html-webpack-plugin": "2.29.0",
+    "jest": "20.0.4",
+    "object-assign": "4.1.1",
+    "postcss-flexbugs-fixes": "3.2.0",
+    "postcss-loader": "2.0.8",
+    "prop-types": "^15.6.0",
+    "react-addons-test-utils": "15.6.2",
+    "react-test-renderer": "^16.0.0",
+    "rimraf": "2.6.2",
+    "promise": "8.0.1",
+    "raf": "3.4.0",
+    "react-dev-utils": "^5.0.2",
+    "react-docgen": "2.14.0",
+    "react-error-overlay": "^1.0.6",
+    "react-prism": "^4.2.0",
+    "resolve": "1.6.0",
+    "style-loader": "0.19.0",
+    "sw-precache-webpack-plugin": "0.11.4",
+    "url-loader": "0.6.2",
+    "webpack": "3.8.1",
+    "webpack-dev-server": "2.11.3",
+    "webpack-manifest-plugin": "1.3.2",
+    "whatwg-fetch": "2.0.3"
+  },
+  "homepage": "https://github.com/RebelOpSys/react-query-builder-semantic",
   "scripts": {
-    "start": "webpack-dev-server --env dev",
-    "dist": "del dist; webpack --env prod",
-    "publish:demo": "npm run dist && node gh-pages.publish.js",
-    "test": "karma start karma.conf.js",
-    "test:watch": "npm test -- --no-single-run --auto-watch",
-    "codecov": "cat coverage/*/lcov.info | ./node_modules/codecov.io/bin/codecov.io.js",
-    "generate-changelog": "node node_modules/github-changes -o sapientglobalmarkets -r react-querybuilder -a --use-commit-body --only-pulls --date-format=\"(YYYY/MM/DD)\""
+    "prestart": "npm run gen:docs",
+    "start": "npm-run-all --parallel start:docs gen:docs-watch",
+    "start:docs": "node scripts/start.js",
+    "gen:docs": "node scripts/generateComponentData.js",
+    "gen:docs-watch": "npm run gen:docs -- --watch",
+    "build:docs": "node scripts/build.js",
+    "test": "node scripts/test.js --env=jsdom",
+    "build:css": "cpx \"./src/components/**/*.css\" ./lib",
+    "prebuild:lib": "rimraf lib",
+    "build:lib": "npm-run-all --parallel build:commonjs build:css build:copy-files",
+    "build:copy-files": "node scripts/copyBuildFiles.js",
+    "predeploy:docs": "npm run build:docs",
+    "deploy:docs": "gh-pages -d build",
+    "build:commonjs": "cross-env NODE_ENV=production babel ./src/components --out-dir ./lib --ignore spec.js",
+    "prepublish": "npm run build:lib"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx,mjs}"
+    ],
+    "setupFiles": [
+      "<rootDir>/config/polyfills.js"
+    ],
+    "testMatch": [
+      "<rootDir>/src/**/__tests__/**/*.{js,jsx,mjs}",
+      "<rootDir>/src/**/?(*.)(spec|test).{js,jsx,mjs}"
+    ],
+    "testEnvironment": "node",
+    "testURL": "http://localhost",
+    "transform": {
+      "^.+\\.(js|jsx|mjs)$": "<rootDir>/node_modules/babel-jest",
+      "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
+      "^(?!.*\\.(js|jsx|mjs|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
+    },
+    "transformIgnorePatterns": [
+      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs)$"
+    ],
+    "moduleNameMapper": {
+      "^react-native$": "react-native-web"
+    },
+    "moduleFileExtensions": [
+      "web.js",
+      "js",
+      "json",
+      "web.jsx",
+      "jsx",
+      "node",
+      "mjs"
+    ]
+  },
+  "babel": {
+    "presets": [
+      [
+        "env",
+        {
+          "modules": "commonjs"
+        }
+      ],
+      "react-app"
+    ]
+  },
+  "eslintConfig": {
+    "extends": "react-app"
   }
 }
