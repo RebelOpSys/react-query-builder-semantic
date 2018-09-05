@@ -10,11 +10,15 @@ Thanks to [sapientglobalmarkets](https://github.com/sapientglobalmarkets/react-q
 Thanks to [coryhouse](https://github.com/coryhouse/ps-react) for providing the medium for documentation and deployment
 
 ## Getting Started
-
 ```shell
 npm install react-query-builder-semantic --save
 ```
+
+## Coming Soon
+- [Semantic UI React Integration](https://react.semantic-ui.com/)
+
 ## Documentation
+[Component documentation](https://rebelopsys.github.io/react-query-builder-semantic/)
 
 ## Usage
 
