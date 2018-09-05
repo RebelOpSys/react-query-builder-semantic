@@ -23,7 +23,7 @@ npm install react-query-builder-semantic --save
 ## Usage
 
 ```jsx
-import QueryBuilder from 'react-query-builder-semantic';
+import QueryBuilder from 'react-query-builder-semantic/lib/QueryBuilder';
 
 const fields = [
     {name: 'firstName', label: 'First Name'},

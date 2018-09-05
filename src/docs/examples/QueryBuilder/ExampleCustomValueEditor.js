@@ -1,5 +1,5 @@
 import React from 'react';
-import QueryBuilder from 'react-query-builder-semantic/QueryBuilder';
+import QueryBuilder from 'react-query-builder-semantic/lib/QueryBuilder';
 
 
 const fields = [

@@ -56,7 +56,7 @@ function createPackageFile() {
     } = packageData;
 
     const minimalPackage = {
-      name: 'react-awesome-query-builder-semantic',
+      name: 'react-query-builder-semantic',
       author,
       version,
       description,
