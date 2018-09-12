@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
  * Default element to input a value for a Rule in the QueryBuilder
  */
 const ValueEditor = (props) => {
-    const { operator, value, handleOnChange, title } = props;
+    const { operator, value, handleOnChange, title, className } = props;
 
     if (operator === 'null' || operator === 'notNull') {
         return null;
@@ -13,6 +13,7 @@ const ValueEditor = (props) => {
 
     return (
         <input type="text"
+               className={className}
                value={value}
                title={title}
                onChange={e => handleOnChange(e.target.value)} />
@@ -42,6 +43,10 @@ ValueEditor.propTypes = {
      * html title
      */
     title: PropTypes.string,
+    /**
+     * //css className to be applied
+     */
+    className: PropTypes.string,
 };
 
 export default ValueEditor;

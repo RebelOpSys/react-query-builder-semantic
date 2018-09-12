@@ -11,97 +11,109 @@ class RuleGroup extends React.Component {
     }
 
     render() {
-        const { combinator, rules, translations, onRuleRemove, createRule, onRuleAdd, createRuleGroup, onGroupAdd, onGroupRemove,
-            isRuleGroup, getLevel, getOperators, onPropChange, schema: { combinators, controls, classNames } } = this.props;
+        const {
+            combinator, rules, translations, onRuleRemove, createRule, onRuleAdd, createRuleGroup, onGroupAdd, onGroupRemove,
+            isRuleGroup, getLevel, getOperators, onPropChange, schema: { combinators, controls, classNames }
+        } = this.props;
         const level = getLevel(this.props.id);
         return (
-            <div className={`ruleGroup ${classNames.ruleGroup}`}>
-                {
-                    React.createElement(controls.combinatorSelector,
-                        {
-                            options: combinators,
-                            value: combinator,
-                            title: translations.combinators.title,
-                            className: `ruleGroup-combinators ${classNames.combinators}`,
-                            handleOnChange: this.onCombinatorChange,
-                            rules: rules,
-                            level: level
-                        }
-                    )
-                }
-                {
-                    React.createElement(controls.addRuleAction,
-                        {
-                            label: translations.addRule.label,
-                            title: translations.addRule.title,
-                            className: `ruleGroup-addRule ${classNames.addRule}`,
-                            handleOnClick: this.addRule,
-                            rules: rules,
-                            level: level
-                        }
-                    )
-                }
-                {
-                    React.createElement(controls.addGroupAction,
-                        {
-                            label: translations.addGroup.label,
-                            title: translations.addGroup.title,
-                            className: `ruleGroup-addGroup ${classNames.addGroup}`,
-                            handleOnClick: this.addGroup,
-                            rules: rules,
-                            level: level
-                        }
-                    )
-                }
-                {
-                    this.hasParentGroup() ?
-                        React.createElement(controls.removeGroupAction,
+            <div className={'group-or-rule-container group-container'}>
+                <div className={`group group-or-rule ${classNames.ruleGroup}`}>
+                    <div className={'group--header'}>
+                        <div className={'group--combinators'}>
                             {
-                                label: translations.removeGroup.label,
-                                title: translations.removeGroup.title,
-                                className: `ruleGroup-remove ${classNames.removeGroup}`,
-                                handleOnClick: this.removeGroup,
-                                rules: rules,
-                                level: level
+                                React.createElement(controls.combinatorSelector,
+                                    {
+                                        options: combinators,
+                                        value: combinator,
+                                        title: translations.combinators.title,
+                                        className: `ruleGroup-combinators ${classNames.combinators}`,
+                                        handleOnChange: this.onCombinatorChange,
+                                        rules: rules,
+                                        level: level
+                                    }
+                                )
                             }
-                        ) : null
-                }
-                {
-                    rules.map(r => {
-                        return (
-                            isRuleGroup(r)
-                                ? <RuleGroup key={r.id}
-                                             id={r.id}
-                                             schema={this.props.schema}
-                                             parentId={this.props.id}
-                                             onGroupAdd={onGroupAdd}
-                                             getLevel={getLevel}
-                                             isRuleGroup={isRuleGroup}
-                                             createRuleGroup={createRuleGroup}
-                                             onGroupRemove={onGroupRemove}
-                                             onPropChange={onPropChange}
-                                             onRuleAdd={onRuleAdd}
-                                             onRuleRemove={onRuleRemove}
-                                             createRule={createRule}
-                                             getOperators={getOperators}
-                                             combinator={r.combinator}
-                                             translations={this.props.translations}
-                                             rules={r.rules} />
-                                : <Rule key={r.id}
-                                        id={r.id}
-                                        field={r.field}
-                                        value={r.value}
-                                        getOperators={getOperators}
-                                        onPropChange={onPropChange}
-                                        getLevel={getLevel}
-                                        operator={r.operator}
-                                        schema={this.props.schema}
-                                        parentId={this.props.id}
-                                        translations={this.props.translations}
-                                        onRuleRemove={onRuleRemove} />
-                        );
-                    })
-                }
+                        </div>
+                        <div className={'group--actions'}>
+                            {
+                                React.createElement(controls.addRuleAction,
+                                    {
+                                        label: translations.addRule.label,
+                                        title: translations.addRule.title,
+                                        className: `ruleGroup-addRule ${classNames.addRule}`,
+                                        handleOnClick: this.addRule,
+                                        rules: rules,
+                                        level: level
+                                    }
+                                )
+                            }
+                            {
+                                React.createElement(controls.addGroupAction,
+                                    {
+                                        label: translations.addGroup.label,
+                                        title: translations.addGroup.title,
+                                        className: `ruleGroup-addGroup ${classNames.addGroup}`,
+                                        handleOnClick: this.addGroup,
+                                        rules: rules,
+                                        level: level
+                                    }
+                                )
+                            }
+                            {
+                                this.hasParentGroup() ?
+                                    React.createElement(controls.removeGroupAction,
+                                        {
+                                            label: translations.removeGroup.label,
+                                            title: translations.removeGroup.title,
+                                            className: `ruleGroup-remove ${classNames.removeGroup}`,
+                                            handleOnClick: this.removeGroup,
+                                            rules: rules,
+                                            level: level
+                                        }
+                                    ) : null
+                            }
+                        </div>
+                    </div>
+                    <div className="group--children">
+                        {
+                            rules.map(rule => {
+                                return (
+                                    isRuleGroup(rule)
+                                        ? <RuleGroup key={rule.id}
+                                                     id={rule.id}
+                                                     schema={this.props.schema}
+                                                     parentId={this.props.id}
+                                                     onGroupAdd={onGroupAdd}
+                                                     getLevel={getLevel}
+                                                     isRuleGroup={isRuleGroup}
+                                                     createRuleGroup={createRuleGroup}
+                                                     onGroupRemove={onGroupRemove}
+                                                     onPropChange={onPropChange}
+                                                     onRuleAdd={onRuleAdd}
+                                                     onRuleRemove={onRuleRemove}
+                                                     createRule={createRule}
+                                                     getOperators={getOperators}
+                                                     combinator={rule.combinator}
+                                                     translations={this.props.translations}
+                                                     rules={rule.rules} />
+                                        : <Rule key={rule.id}
+                                                id={rule.id}
+                                                field={rule.field}
+                                                value={rule.value}
+                                                getOperators={getOperators}
+                                                onPropChange={onPropChange}
+                                                getLevel={getLevel}
+                                                operator={rule.operator}
+                                                schema={this.props.schema}
+                                                parentId={this.props.id}
+                                                translations={this.props.translations}
+                                                onRuleRemove={onRuleRemove} />
+                                );
+                            })
+                        }
+                    </div>
+                </div>
             </div>
         );
     }

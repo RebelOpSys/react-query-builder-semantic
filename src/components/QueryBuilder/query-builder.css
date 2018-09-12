@@ -1,0 +1,138 @@
+.query-builder {
+    overflow: hidden;
+}
+.query-builder *, .query-builder *::before, .query-builder *::after {
+    box-sizing: border-box;
+}
+/******************************************************************************/
+/** COMMON ********************************************************************/
+/******************************************************************************/
+.query-builder, .query-preview {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 12px;
+    line-height: 1.25;
+    margin: 1rem;
+}
+.query-preview {
+    font-size: 14px;
+    background: rgba(250, 240, 210, 0.5);
+    border: 1px solid #dcc896;
+    min-height: 1rem;
+    display: block;
+    padding: 1rem;
+}
+.group-or-rule {
+    border-radius: 5px;
+    position: relative;
+}
+.group-or-rule-container {
+    margin-bottom: 10px;
+    padding-right: 10px;
+}
+/******************************************************************************/
+/** RULE **********************************************************************/
+/******************************************************************************/
+.rule--header {
+    float: right;
+}
+.rule--field, .rule--operator, .rule--value, .rule--operator-options, .rule--widget, .widget--widget, .widget--valuesrc, .widget--sep, .operator--options--sep {
+    display: inline-block;
+}
+.rule--operator, .rule--value, .widget--widget, .widget--valuesrc, .widget--sep {
+    margin-left: 10px;
+}
+.operator--options--sep {
+    margin-right: 10px;
+}
+div.tooltip-inner {
+    max-width: 500px;
+}
+.rule--field label, .rule--operator label, .widget--widget label {
+    display: block;
+    font-weight: bold;
+}
+
+
+.rule--header:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+.group--header, .group--footer {
+    display: flex;
+    align-items: center;
+}
+
+.rule {
+    background-color: white;
+    border: 1px solid transparent;
+    padding: 10px;
+}
+.qb-placeholder {
+    border: 1px dashed gray;
+}
+/******************************************************************************/
+/** GROUP *********************************************************************/
+/******************************************************************************/
+.group {
+    background: rgba(250, 240, 210, 0.5);
+    border: 1px solid #dcc896;
+}
+
+.group--children {
+    padding-left: 20px;
+}
+.group--children > .group-or-rule-container > .group-or-rule:before {
+    top: -4px;
+    border-width: 0 0 2px 2px;
+}
+.group--children > .group-or-rule-container > .group-or-rule::after {
+    top: 50%;
+    border-width: 0 0 0 2px;
+}
+.group--children > .group-or-rule-container > .group-or-rule::before, .group--children > .group-or-rule-container > .group-or-rule::after {
+    content: '';
+    position: absolute;
+    left: -14px;
+    width: 14px;
+    height: calc(50% + 8px);
+    border-color: #ccc;
+    border-style: solid;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.group--children > .group-or-rule-container:first-child > .group-or-rule::before {
+    top: -12px;
+    height: calc(50% + 14px);
+}
+.group--children > .group-or-rule-container:last-child > .group-or-rule::before {
+    border-radius: 0 0 0 4px;
+}
+.group--children > .group-or-rule-container:last-child > .group-or-rule::after {
+    display: none;
+}
+.group--children.hide--line > .group-or-rule-container > .group-or-rule::before, .group--children.hide--line > .group-or-rule-container > .group-or-rule::after {
+    border-color: rgba(128, 128, 128, 0.1);
+}
+.group--header, .group--footer {
+    padding-top: 10px;
+    padding-right: 5px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+}
+.group--combinators.hide--conj {
+    opacity: 0.3;
+}
+.group--actions {
+    flex: 1;
+    display: flex;
+}
+
+
+/******************************************************************************/
+/** COMBINATOR ***************************************************************/
+/******************************************************************************/
+.combinator {
+    display: inline-block;
+}

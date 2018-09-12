@@ -15,55 +15,59 @@ class Rule extends React.Component {
         const { field, operator, value, translations, getOperators, getLevel, schema: { fields, controls, classNames } } = this.props;
         const level = getLevel(this.props.id);
         return (
-            <div className={`rule ${classNames.rule}`}>
-                {
-                    React.createElement(controls.fieldSelector,
+            <div className={'group-or-rule-container rule-container'}>
+                <div className={`rule group-or-rule ${classNames.rule}`}>
+                    {
+                        React.createElement(controls.fieldSelector,
+                            {
+                                options: fields,
+                                title: translations.fields.title,
+                                value: field,
+                                className: `rule--field ${classNames.fields}`,
+                                handleOnChange: this.onFieldChanged,
+                                level: level
+                            }
+                        )
+                    }
+                    {
+                        React.createElement(controls.operatorSelector,
+                            {
+                                field: field,
+                                title: translations.operators.title,
+                                options: getOperators(field),
+                                value: operator,
+                                className: `rule--operator ${classNames.operators}`,
+                                handleOnChange: this.onOperatorChanged,
+                                level: level
+                            }
+                        )
+                    }
+                    {
+                        React.createElement(controls.valueEditor,
+                            {
+                                field: field,
+                                title: translations.value.title,
+                                operator: operator,
+                                value: value,
+                                className: `rule--value ${classNames.value}`,
+                                handleOnChange: this.onValueChanged,
+                                level: level
+                            }
+                        )
+                    }
+                    <div className={'rule--header'}>
                         {
-                            options: fields,
-                            title: translations.fields.title,
-                            value: field,
-                            className: `rule-fields ${classNames.fields}`,
-                            handleOnChange: this.onFieldChanged,
-                            level: level
+                            React.createElement(controls.removeRuleAction,
+                                {
+                                    label: translations.removeRule.label,
+                                    title: translations.removeRule.title,
+                                    className: `rule--remove ${classNames.removeRule}`,
+                                    handleOnClick: this.removeRule,
+                                    level: level
+                                })
                         }
-                    )
-                }
-                {
-                    React.createElement(controls.operatorSelector,
-                        {
-                            field: field,
-                            title: translations.operators.title,
-                            options: getOperators(field),
-                            value: operator,
-                            className: `rule-operators ${classNames.operators}`,
-                            handleOnChange: this.onOperatorChanged,
-                            level: level
-                        }
-                    )
-                }
-                {
-                    React.createElement(controls.valueEditor,
-                        {
-                            field: field,
-                            title: translations.value.title,
-                            operator: operator,
-                            value: value,
-                            className: `rule-value ${classNames.value}`,
-                            handleOnChange: this.onValueChanged,
-                            level: level
-                        }
-                    )
-                }
-                {
-                    React.createElement(controls.removeRuleAction,
-                        {
-                            label: translations.removeRule.label,
-                            title: translations.removeRule.title,
-                            className: `rule-remove ${classNames.removeRule}`,
-                            handleOnClick: this.removeRule,
-                            level: level
-                        })
-                }
+                    </div>
+                </div>
             </div>
         );
     }

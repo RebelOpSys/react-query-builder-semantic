@@ -76,7 +76,7 @@ class QueryBuilder extends React.Component {
         const { translations } = this.props;
 
         return (
-            <div className={`queryBuilder ${schema.classNames.queryBuilder}`}>
+            <div className={`query-builder ${schema.classNames.queryBuilder}`}>
                 <RuleGroup
                     translations={translations}
                     rules={rules}
@@ -297,7 +297,6 @@ class QueryBuilder extends React.Component {
             operators: '',
             value: '',
             removeRule: '',
-
         };
     }
 
