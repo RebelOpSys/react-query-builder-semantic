@@ -115,16 +115,18 @@ div.tooltip-inner {
 .group--children.hide--line > .group-or-rule-container > .group-or-rule::before, .group--children.hide--line > .group-or-rule-container > .group-or-rule::after {
     border-color: rgba(128, 128, 128, 0.1);
 }
-.group--header, .group--footer {
+.group--header {
     padding-top: 10px;
     padding-right: 5px;
     padding-bottom: 10px;
-    padding-left: 10px;
+    padding-left: 7px;
 }
 .group--actions {
     flex: 1;
     display: flex;
 }
+
+
 /******************************************************************************/
 /** COMBINATOR ***************************************************************/
 /******************************************************************************/

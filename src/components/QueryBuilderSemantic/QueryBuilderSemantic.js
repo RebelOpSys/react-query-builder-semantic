@@ -2,16 +2,15 @@ import shortid from 'shortid';
 import cloneDeep from 'lodash/cloneDeep';
 import React from 'react';
 import PropTypes from 'prop-types';
-import RuleGroup from '../RuleGroup';
-import ActionElement from '../ActionElement';
-import ValueSelector from '../ValueSelector';
-import ValueEditor from '../ValueEditor';
+import RuleGroup from '../RuleGroupSemantic';
+import ValueSelector from '../ValueSelectorSemantic';
+import ValueEditor from '../ValueEditorSemantic';
 
 /**
- * QueryBuilder is an UI component to create queries and filters.
+ * QueryBuilderSemantic is QueryBuilder with react.semantic-ui components.
  * It outputs a structured JSON of rules which can be easily parsed to create SQL/NoSQL/whatever queries.
  */
-class QueryBuilder extends React.Component {
+class QueryBuilderSemantic extends React.Component {
 
     constructor(...args) {
         super(...args);
@@ -47,13 +46,16 @@ class QueryBuilder extends React.Component {
     }
 
     componentWillMount() {
-        const { fields, operators, combinators, controlElements, controlClassNames } = this.props;
-        const classNames = Object.assign({}, QueryBuilder.defaultControlClassNames, controlClassNames);
-        const controls = Object.assign({}, QueryBuilder.defaultControlElements, controlElements);
+        const { fields, operators, combinators, controlElements, controlClassNames, groupButtonSize,ruleButtonSize, inputSize } = this.props;
+        const classNames = Object.assign({}, QueryBuilderSemantic.defaultControlClassNames, controlClassNames);
+        const controls = Object.assign({}, QueryBuilderSemantic.defaultControlElements, controlElements);
         this.setState({
             root: this.getInitialQuery(),
             schema: {
                 fields,
+                groupButtonSize,
+                ruleButtonSize,
+                inputSize,
                 operators,
                 combinators,
                 classNames,
@@ -76,7 +78,7 @@ class QueryBuilder extends React.Component {
         const { translations } = this.props;
 
         return (
-            <div className={`${schema.classNames.queryBuilder}`}>
+            <div className={`query-builder ${schema.classNames.queryBuilder}`}>
                 <RuleGroup
                     translations={translations}
                     rules={rules}
@@ -113,9 +115,9 @@ class QueryBuilder extends React.Component {
 
         return {
             id: `r-${shortid.generate()}`,
-            field: fields[0].name,
+            field: fields[0].value,
             value: '',
-            operator: operators[0].name
+            operator: operators[0].value
         };
     }
 
@@ -123,7 +125,7 @@ class QueryBuilder extends React.Component {
         return {
             id: `g-${shortid.generate()}`,
             rules: [],
-            combinator: this.props.combinators[0].name,
+            combinator: this.props.combinators[0].value,
         };
     }
 
@@ -227,7 +229,6 @@ class QueryBuilder extends React.Component {
     }
 
     static get defaultTranslations() {
-
         return {
             fields: {
                 title: "Fields",
@@ -239,66 +240,60 @@ class QueryBuilder extends React.Component {
                 title: "Value",
             },
             removeRule: {
-                label: "x",
+                icon: "remove",
                 title: "Remove rule",
             },
             removeGroup: {
-                label: "x",
+                icon: "minus",
                 title: "Remove group",
             },
             addRule: {
-                label: "+Rule",
+                icon: "plus",
                 title: "Add rule",
             },
             addGroup: {
-                label: "+Group",
+                icon: "plus",
                 title: "Add group",
             },
             combinators: {
+                icon: 'code branch',
                 title: "Combinators",
             }
         }
     }
 
     static get defaultOperators() {
-
         return [
-            { name: 'null', label: 'Is Null' },
-            { name: 'notNull', label: 'Is Not Null' },
-            { name: 'in', label: 'In' },
-            { name: 'notIn', label: 'Not In' },
-            { name: '=', label: '=' },
-            { name: '!=', label: '!=' },
-            { name: '<', label: '<' },
-            { name: '>', label: '>' },
-            { name: '<=', label: '<=' },
-            { name: '>=', label: '>=' },
+            { value: 'null', text: 'Is Null' },
+            { value: 'notNull', text: 'Is Not Null' },
+            { value: 'in', text: 'In' },
+            { value: 'notIn', text: 'Not In' },
+            { value: '=', text: '=' },
+            { value: '!=', text: '!=' },
+            { value: '<', text: '<' },
+            { value: '>', text: '>' },
+            { value: '<=', text: '<=' },
+            { value: '>=', text: '>=' },
         ];
     }
 
     static get defaultCombinators() {
-
         return [
-            { name: 'and', label: 'AND' },
-            { name: 'or', label: 'OR' },
+            { value: 'and', text: 'AND' },
+            { value: 'or', text: 'OR' },
         ];
     }
 
     static get defaultControlClassNames() {
         return {
             queryBuilder: 'query-builder',
-            removeRule: 'rule--remove',
             ruleGroup: 'group group-or-rule',
-            ruleGroupHeader: 'group--header',
             ruleGroupContainer: 'group-or-rule-container group-container',
-            ruleGroupCombinators: 'group--combinators',
-            combinators: 'ruleGroup--combinators',
-            ruleGroupActions: 'group--actions',
-            addRule: 'ruleGroup--addRule',
-            addGroup: 'ruleGroup--addGroup',
-            removeGroup: 'ruleGroup--removeGroup',
+            combinators: 'ruleGroup-combinators',
+            addRule: 'ruleGroup-addRule',
+            addGroup: 'ruleGroup-addGroup',
+            removeGroup: 'ruleGroup-removeGroup',
             rule: 'rule group-or-rule',
-            ruleHeader: 'rule--header',
             ruleContainer: 'group-or-rule-container rule-container',
             fields: 'rule--field',
             operators: 'rule--operator',
@@ -308,11 +303,6 @@ class QueryBuilder extends React.Component {
 
     static get defaultControlElements() {
         return {
-            addGroupAction: ActionElement,
-            removeGroupAction: ActionElement,
-            addRuleAction: ActionElement,
-            removeRuleAction: ActionElement,
-            combinatorSelector: ValueSelector,
             fieldSelector: ValueSelector,
             operatorSelector: ValueSelector,
             valueEditor: ValueEditor
@@ -321,52 +311,65 @@ class QueryBuilder extends React.Component {
 
 }
 
-QueryBuilder.defaultProps = {
+QueryBuilderSemantic.defaultProps = {
     query: null,
     fields: [],
-    operators: QueryBuilder.defaultOperators,
-    combinators: QueryBuilder.defaultCombinators,
-    translations: QueryBuilder.defaultTranslations,
-    controlElements: QueryBuilder.defaultControlElements,
+    operators: QueryBuilderSemantic.defaultOperators,
+    combinators: QueryBuilderSemantic.defaultCombinators,
+    translations: QueryBuilderSemantic.defaultTranslations,
+    controlElements: QueryBuilderSemantic.defaultControlElements,
     getOperators: null,
     onQueryChange: null,
-    controlClassNames: QueryBuilder.defaultControlClassNames
+    ruleButtonSize: 'tiny',
+    groupButtonSize:'tiny',
+    ruleInputSize: 'tiny',
+    controlClassNames: QueryBuilderSemantic.defaultControlClassNames
 };
 
-QueryBuilder.propTypes = {
+QueryBuilderSemantic.propTypes = {
+    /**
+     * Size for semantic buttons on rule
+     * https://react.semantic-ui.com/elements/button/#variations-size
+     */
+    ruleButtonSize: PropTypes.string,
+    /**
+     * Size for semantic buttons on group
+     * https://react.semantic-ui.com/elements/button/#variations-size
+     */
+    groupButtonSize: PropTypes.string,
+    /**
+     * Size for semantic inputs
+     * https://react.semantic-ui.com/elements/input/#variations-size
+     */
+    inputSize: PropTypes.string,
     query: PropTypes.object,
     /**
      *  The array of fields that should be used. Each field should be an object with
-     The Id is optional, if you do not provide an id for a field then the name will be used
+     The Id is optional, if you do not provide an id for a field then the value will be used
      */
     fields: PropTypes.arrayOf(PropTypes.shape({
-        name: PropTypes.string.isRequired,
-        label: PropTypes.string.isRequired,
+        value: PropTypes.string.isRequired,
+        text: PropTypes.string.isRequired,
         id: PropTypes.string
     })).isRequired,
     /**
      The array of operators that should be used.
      */
     operators: PropTypes.arrayOf(PropTypes.shape({
-        name: PropTypes.string.isRequired,
-        label: PropTypes.string.isRequired,
+        value: PropTypes.string.isRequired,
+        text: PropTypes.string.isRequired,
     })),
     /**
      * The array of combinators that should be used for RuleGroups
      */
     combinators: PropTypes.arrayOf(PropTypes.shape({
-        name: PropTypes.string.isRequired,
-        label: PropTypes.string.isRequired,
+        value: PropTypes.string.isRequired,
+        text: PropTypes.string.isRequired,
     })),
     /**
      * This is a custom controls object that allows you to override the control elements used. The following control overrides are supported
      */
     controlElements: PropTypes.shape({
-        addGroupAction: PropTypes.func,
-        removeGroupAction: PropTypes.func,
-        addRuleAction: PropTypes.func,
-        removeRuleAction: PropTypes.func,
-        combinatorSelector: PropTypes.func,
         fieldSelector: PropTypes.func,
         operatorSelector: PropTypes.func,
         valueEditor: PropTypes.func
@@ -380,7 +383,7 @@ QueryBuilder.propTypes = {
      */
     onQueryChange: PropTypes.func,
     /**
-     * This can be used to assign specific CSS classes to various controls that are created by the
+     * This can be used to assign specific CSS classes to various controls that are created by the QueryBuilderSemantic
      */
     controlClassNames: PropTypes.shape({
         /**
@@ -429,7 +432,9 @@ QueryBuilder.propTypes = {
         removeRule: PropTypes.string,
     }),
     /**
-     * This can be used to override translatable texts applied to various controls that are created by the <QueryBuilder />
+     * This can be used to override translatable texts and
+     * icons applied to various controls that are created by the <QueryBuilderSemantic />
+     * https://react.semantic-ui.com/elements/icon/
      */
     translations: PropTypes.shape({
         fields: PropTypes.shape({
@@ -442,19 +447,19 @@ QueryBuilder.propTypes = {
             title: PropTypes.string
         }),
         removeRule: PropTypes.shape({
-            label: PropTypes.string,
+            icon: PropTypes.string,
             title: PropTypes.string
         }),
         removeGroup: PropTypes.shape({
-            label: PropTypes.string,
+            icon: PropTypes.string,
             title: PropTypes.string
         }),
         addRule: PropTypes.shape({
-            label: PropTypes.string,
+            icon: PropTypes.string,
             title: PropTypes.string
         }),
         addGroup: PropTypes.shape({
-            label: PropTypes.string,
+            icon: PropTypes.string,
             title: PropTypes.string
         }),
         combinators: PropTypes.shape({
@@ -463,4 +468,4 @@ QueryBuilder.propTypes = {
     }),
 };
 
-export default QueryBuilder;
+export default QueryBuilderSemantic;

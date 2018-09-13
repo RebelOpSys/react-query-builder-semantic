@@ -37,11 +37,17 @@
     "prop-types": "^15.6.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "shortid": "2.2.13"
+    "shortid": "2.2.13",
+    "semantic-ui-css": "2.3.3",
+    "semantic-ui-react": "0.82.4"
   },
   "peerDependencies": {
     "react": "^16.2.0",
     "react-dom": "^16.2.0"
+  },
+  "optionalDependencies": {
+    "semantic-ui-css": "2.3.3",
+    "semantic-ui-react": "0.82.4"
   },
   "devDependencies": {
     "autoprefixer": "7.1.6",

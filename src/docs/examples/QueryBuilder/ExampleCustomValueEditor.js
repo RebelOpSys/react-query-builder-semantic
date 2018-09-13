@@ -29,13 +29,18 @@ export default class ExampleCustomValueEditor extends React.Component {
     }
 
     customValueEditor() {
-        let checkbox = class MyCheckbox extends React.Component {
+        let customValue = class CustomValue extends React.Component {
             constructor(props) {
                 super(props);
+                console.log(props);
             }
 
             render() {
-                if (this.props.field !== 'isDev' || this.props.operator !== '=') {
+                if (this.props.operator === 'null' || this.props.operator === 'notNull') {
+                    return null;
+                }
+
+                if (this.props.field !== 'isDev' ) {
                     return <input type="text"
                                   value={this.props.value}
                                   onChange={e => this.props.handleOnChange(e.target.value)} />
@@ -50,7 +55,7 @@ export default class ExampleCustomValueEditor extends React.Component {
                 );
             }
         };
-        return checkbox;
+        return customValue;
     }
 
     render() {

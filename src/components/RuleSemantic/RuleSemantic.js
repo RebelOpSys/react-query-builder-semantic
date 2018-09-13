@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Button } from 'semantic-ui-react';
 
 /**
  * Default element to represent a rule for a RuleGroup in the QueryBuilder
  */
-class Rule extends React.Component {
+class RuleSemantic extends React.Component {
 
     constructor(props) {
         super(props);
@@ -12,7 +13,7 @@ class Rule extends React.Component {
 
 
     render() {
-        const { field, operator, value, translations, getOperators, schema: { fields, controls, classNames } } = this.props;
+        const { field, operator, value, translations, getOperators, schema: { fields, controls, classNames, ruleButtonSize, inputSize } } = this.props;
         return (
             <div className={`${classNames.ruleContainer}`}>
                 <div className={`${classNames.rule}`}>
@@ -39,29 +40,26 @@ class Rule extends React.Component {
                             }
                         )
                     }
-                    {
-                        React.createElement(controls.valueEditor,
-                            {
-                                field: field,
-                                title: translations.value.title,
-                                operator: operator,
-                                value: value,
-                                className: `${classNames.value}`,
-                                handleOnChange: this.onValueChanged,
-                            }
-                        )
-                    }
-                    <div className={`${classNames.ruleHeader}`}>
+                    {React.createElement(controls.valueEditor,
                         {
-                            React.createElement(controls.removeRuleAction,
-                                {
-                                    label: translations.removeRule.label,
-                                    title: translations.removeRule.title,
-                                    className: `${classNames.removeRule}`,
-                                    handleOnClick: this.removeRule,
-                                })
+                            field: field,
+                            title: translations.value.title,
+                            operator: operator,
+                            size: inputSize,
+                            value: value,
+                            className: `${classNames.value}`,
+                            handleOnChange: this.onValueChanged,
                         }
-                    </div>
+                    )
+                    }
+                    <Button
+                        compact
+                        circular
+                        floated={'right'}
+                        size={ruleButtonSize}
+                        icon={translations.removeRule.icon}
+                        onClick={this.removeRule}
+                    />
                 </div>
             </div>
         );
@@ -76,6 +74,7 @@ class Rule extends React.Component {
     }
 
     onValueChanged = (value) => {
+        console.log(value);
         this.onElementChanged('value', value);
     }
 
@@ -93,7 +92,7 @@ class Rule extends React.Component {
     }
 }
 
-Rule.propTypes = {
+RuleSemantic.propTypes = {
     /**
      * This is a callback function invoked to get the list of allowed operators for the given field
      */
@@ -136,7 +135,7 @@ Rule.propTypes = {
     schema: PropTypes.object
 };
 
-Rule.defaultProps = {
+RuleSemantic.defaultProps = {
     id: null,
     parentId: null,
     field: null,
@@ -145,4 +144,4 @@ Rule.defaultProps = {
     schema: null
 };
 
-export default Rule;
+export default RuleSemantic;

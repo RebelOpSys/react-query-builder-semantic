@@ -23,7 +23,7 @@ if (enableWatchMode) {
 
 function generate(paths) {
   var errors = [];
-  var componentData = getDirectories(paths.components).map(function(componentName) {
+  var componentData = getDirectories(paths.components).sort().map(function(componentName) {
     try {
       return getComponentData(paths, componentName);
     } catch(error) {

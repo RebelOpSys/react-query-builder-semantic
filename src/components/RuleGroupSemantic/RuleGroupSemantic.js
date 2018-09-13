@@ -1,11 +1,12 @@
 import React from 'react';
-import Rule from '../Rule';
+import Rule from '../RuleSemantic';
 import PropTypes from 'prop-types';
+import { Button, Dropdown } from 'semantic-ui-react';
 
 /**
  * Default element to group rules for the QueryBuilder
  */
-class RuleGroup extends React.Component {
+class RuleGroupSemantic extends React.Component {
     constructor(props) {
         super(props);
     }
@@ -13,81 +14,67 @@ class RuleGroup extends React.Component {
     render() {
         const {
             combinator, rules, translations, onRuleRemove, createRule, onRuleAdd, createRuleGroup, onGroupAdd, onGroupRemove,
-            isRuleGroup, getLevel, getOperators, onPropChange, schema: { combinators, controls, classNames }
+            isRuleGroup, getLevel, getOperators, onPropChange, schema: { combinators, classNames,groupButtonSize }
         } = this.props;
         return (
             <div className={`${classNames.ruleGroupContainer}`}>
                 <div className={`${classNames.ruleGroup}`}>
-                    <div className={`${classNames.ruleGroupHeader}`}>
-                        <div className={`${classNames.ruleGroupCombinators}`}>
-                            {
-                                React.createElement(controls.combinatorSelector,
-                                    {
-                                        options: combinators,
-                                        value: combinator,
-                                        title: translations.combinators.title,
-                                        className: `${classNames.combinators}`,
-                                        handleOnChange: this.onCombinatorChange,
-                                    }
-                                )
-                            }
-                        </div>
-                        <div className={`${classNames.ruleGroupActions}`}>
-                            {
-                                React.createElement(controls.addRuleAction,
-                                    {
-                                        label: translations.addRule.label,
-                                        title: translations.addRule.title,
-                                        className: `${classNames.addRule}`,
-                                        handleOnClick: this.addRule,
-                                    }
-                                )
-                            }
-                            {
-                                React.createElement(controls.addGroupAction,
-                                    {
-                                        label: translations.addGroup.label,
-                                        title: translations.addGroup.title,
-                                        className: `${classNames.addGroup}`,
-                                        handleOnClick: this.addGroup,
-                                    }
-                                )
-                            }
+                        <Button.Group className={'group--header'} compact labeled icon size={groupButtonSize}>
+                            <Dropdown
+                                button
+                                className={'icon'}
+                                floating
+                                labeled
+                                scrolling
+                                onChange={this.onCombinatorChange}
+                                icon={translations.combinators.icon}
+                                options={combinators}
+                                defaultValue={combinator}
+                            />
+                            <Button
+                                className={classNames.addRule}
+                                icon={translations.addRule.icon}
+                                content={translations.addRule.title}
+                                onClick={this.addRule}
+                            />
+                            <Button
+                                className={classNames.addGroup}
+                                icon={translations.addGroup.icon}
+                                content={translations.addGroup.title}
+                                onClick={this.addGroup}
+                            />
                             {
                                 this.hasParentGroup() ?
-                                    React.createElement(controls.removeGroupAction,
-                                        {
-                                            label: translations.removeGroup.label,
-                                            title: translations.removeGroup.title,
-                                            className: `${classNames.removeGroup}`,
-                                            handleOnClick: this.removeGroup,
-                                        }
-                                    ) : null
+                                    <Button
+                                        className={classNames.removeGroup}
+                                        icon={translations.removeGroup.icon}
+                                        content={translations.removeGroup.title}
+                                        onClick={this.removeGroup}
+                                    /> : null
                             }
-                        </div>
-                    </div>
+                        </Button.Group>
                     <div className="group--children">
                         {
                             rules.map(rule => {
                                 return (
                                     isRuleGroup(rule)
-                                        ? <RuleGroup key={rule.id}
-                                                     id={rule.id}
-                                                     schema={this.props.schema}
-                                                     parentId={this.props.id}
-                                                     onGroupAdd={onGroupAdd}
-                                                     getLevel={getLevel}
-                                                     isRuleGroup={isRuleGroup}
-                                                     createRuleGroup={createRuleGroup}
-                                                     onGroupRemove={onGroupRemove}
-                                                     onPropChange={onPropChange}
-                                                     onRuleAdd={onRuleAdd}
-                                                     onRuleRemove={onRuleRemove}
-                                                     createRule={createRule}
-                                                     getOperators={getOperators}
-                                                     combinator={rule.combinator}
-                                                     translations={this.props.translations}
-                                                     rules={rule.rules} />
+                                        ? <RuleGroupSemantic key={rule.id}
+                                                             id={rule.id}
+                                                             schema={this.props.schema}
+                                                             parentId={this.props.id}
+                                                             onGroupAdd={onGroupAdd}
+                                                             getLevel={getLevel}
+                                                             isRuleGroup={isRuleGroup}
+                                                             createRuleGroup={createRuleGroup}
+                                                             onGroupRemove={onGroupRemove}
+                                                             onPropChange={onPropChange}
+                                                             onRuleAdd={onRuleAdd}
+                                                             onRuleRemove={onRuleRemove}
+                                                             createRule={createRule}
+                                                             getOperators={getOperators}
+                                                             combinator={rule.combinator}
+                                                             translations={this.props.translations}
+                                                             rules={rule.rules} />
                                         : <Rule key={rule.id}
                                                 id={rule.id}
                                                 field={rule.field}
@@ -113,9 +100,8 @@ class RuleGroup extends React.Component {
         return this.props.parentId;
     }
 
-    onCombinatorChange = (value) => {
+    onCombinatorChange = (e, { value }) => {
         const { onPropChange } = this.props;
-
         onPropChange('combinator', value, this.props.id);
     };
 
@@ -148,7 +134,7 @@ class RuleGroup extends React.Component {
 
 }
 
-RuleGroup.propTypes = {
+RuleGroupSemantic.propTypes = {
     /**
      * This is a callback function invoked to get the list of allowed operators for the given field
      */
@@ -211,7 +197,7 @@ RuleGroup.propTypes = {
     schema: PropTypes.object,
 };
 
-RuleGroup.defaultProps = {
+RuleGroupSemantic.defaultProps = {
     id: null,
     parentId: null,
     rules: [],
@@ -220,4 +206,4 @@ RuleGroup.defaultProps = {
 };
 
 
-export default RuleGroup;
+export default RuleGroupSemantic;
