@@ -1,6 +1,3 @@
-.query-builder {
-    overflow: hidden;
-}
 .query-builder *, .query-builder *::before, .query-builder *::after {
     box-sizing: border-box;
 }
@@ -15,8 +12,8 @@
 }
 .query-preview {
     font-size: 14px;
-    background: rgba(250, 240, 210, 0.5);
-    border: 1px solid #dcc896;
+    background: white;
+    border: 1px solid #14DCAF;
     min-height: 1rem;
     display: block;
     padding: 1rem;
@@ -65,7 +62,7 @@ div.tooltip-inner {
 
 .rule {
     background-color: white;
-    border: 1px solid transparent;
+    border: 1px solid lightgrey;
     padding: 10px;
 }
 .qb-placeholder {
@@ -75,8 +72,8 @@ div.tooltip-inner {
 /** GROUP *********************************************************************/
 /******************************************************************************/
 .group {
-    background: rgba(250, 240, 210, 0.5);
-    border: 1px solid #dcc896;
+    background-color: white;
+    border: 1px solid darkgray;
 }
 
 .group--children {
@@ -96,7 +93,7 @@ div.tooltip-inner {
     left: -14px;
     width: 14px;
     height: calc(50% + 8px);
-    border-color: #ccc;
+    border-color: #14DCAF;
     border-style: solid;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -113,13 +110,13 @@ div.tooltip-inner {
     display: none;
 }
 .group--children.hide--line > .group-or-rule-container > .group-or-rule::before, .group--children.hide--line > .group-or-rule-container > .group-or-rule::after {
-    border-color: rgba(128, 128, 128, 0.1);
+    border-color: #14DCAF;
 }
-.group--header, .group--footer {
+.group--header {
     padding-top: 10px;
     padding-right: 5px;
     padding-bottom: 10px;
-    padding-left: 10px;
+    padding-left: 7px;
 }
 .group--actions {
     flex: 1;
