@@ -32,7 +32,6 @@ export default class ExampleCustomValueEditor extends React.Component {
         let customValue = class CustomValue extends React.Component {
             constructor(props) {
                 super(props);
-                console.log(props);
             }
 
             render() {

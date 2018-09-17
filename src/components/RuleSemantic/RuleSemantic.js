@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button } from 'semantic-ui-react';
+import { Button, Segment } from 'semantic-ui-react';
 
 /**
  * Default element to represent a rule for a RuleGroup in the QueryBuilder
@@ -13,10 +13,14 @@ class RuleSemantic extends React.Component {
 
 
     render() {
-        const { field, operator, value, translations, getOperators, schema: { fields, controls, classNames, ruleButtonSize, inputSize } } = this.props;
+        const {
+            field, operator,combinatorColor, value, translations, getOperators, schema:
+                { fields, controls, classNames, ruleButtonSize, ruleSegmentSize, inputSize }
+        } = this.props;
         return (
             <div className={`${classNames.ruleContainer}`}>
-                <div className={`${classNames.rule}`}>
+                <Segment size={ruleSegmentSize} compact padded className={`${classNames.rule}`}
+                         color={combinatorColor}>
                     {
                         React.createElement(controls.fieldSelector,
                             {
@@ -60,7 +64,7 @@ class RuleSemantic extends React.Component {
                         icon={translations.removeRule.icon}
                         onClick={this.removeRule}
                     />
-                </div>
+                </Segment>
             </div>
         );
     }
@@ -74,7 +78,6 @@ class RuleSemantic extends React.Component {
     }
 
     onValueChanged = (value) => {
-        console.log(value);
         this.onElementChanged('value', value);
     }
 
@@ -93,6 +96,10 @@ class RuleSemantic extends React.Component {
 }
 
 RuleSemantic.propTypes = {
+    /**
+     * color for rule segment selected based on combinatorColors array for selected combinator
+     */
+    combinatorColor:PropTypes.string,
     /**
      * This is a callback function invoked to get the list of allowed operators for the given field
      */

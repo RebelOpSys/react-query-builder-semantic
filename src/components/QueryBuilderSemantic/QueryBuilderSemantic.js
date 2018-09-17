@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import RuleGroup from '../RuleGroupSemantic';
 import ValueSelector from '../ValueSelectorSemantic';
 import ValueEditor from '../ValueEditorSemantic';
+import { Segment } from 'semantic-ui-react';
 import _ from 'lodash';
 
 
@@ -64,13 +65,15 @@ class QueryBuilderSemantic extends React.Component {
     }
 
     componentWillMount() {
-        const { fields, operators, combinators, controlElements, controlClassNames, groupButtonSize, ruleButtonSize, inputSize } = this.props;
+        const { fields, operators, combinators, controlElements, controlClassNames, groupButtonSize, ruleGroupSegmentSize, ruleSegmentSize, ruleButtonSize, inputSize } = this.props;
         const classNames = this.mergeProperties(QueryBuilderSemantic.defaultControlClassNames, controlClassNames);
         const controls = this.mergeProperties(QueryBuilderSemantic.defaultControlElements, controlElements);
         this.setState({
             root: this.getInitialQuery(),
             schema: {
                 fields,
+                ruleGroupSegmentSize,
+                ruleSegmentSize,
                 groupButtonSize,
                 ruleButtonSize,
                 inputSize,
@@ -93,12 +96,13 @@ class QueryBuilderSemantic extends React.Component {
 
     render() {
         const { root: { id, rules, combinator }, schema } = this.state;
-        const { translations } = this.props;
+        const { translations, combinatorColors } = this.props;
 
         return (
-            <div className={`${schema.classNames.queryBuilder}`}>
+            <Segment.Group fluid raised className={`${schema.classNames.queryBuilder}`}>
                 <RuleGroup
                     translations={translations}
+                    combinatorColors={combinatorColors}
                     rules={rules}
                     createRule={this.createRule}
                     createRuleGroup={this.createRuleGroup}
@@ -115,7 +119,7 @@ class QueryBuilderSemantic extends React.Component {
                     id={id}
                     parentId={null}
                 />
-            </div>
+            </Segment.Group>
         );
     }
 
@@ -378,6 +382,10 @@ QueryBuilderSemantic.defaultProps = {
         { value: '<=', text: '<=' },
         { value: '>=', text: '>=' },
     ],
+    combinatorColors: [
+        { color: 'purple', combinator: 'and' },
+        { color: 'blue', combinator: 'or' },
+    ],
     combinators: [
         { value: 'and', text: 'AND' },
         { value: 'or', text: 'OR' },
@@ -423,6 +431,8 @@ QueryBuilderSemantic.defaultProps = {
     ruleButtonSize: 'tiny',
     groupButtonSize: 'tiny',
     ruleInputSize: 'tiny',
+    ruleSegmentSize: 'tiny',
+    ruleGroupSegmentSize: 'tiny',
     controlClassNames: {
         queryBuilder: 'query-builder',
         ruleGroup: 'group group-or-rule',
@@ -446,20 +456,25 @@ QueryBuilderSemantic.propTypes = {
      */
     ruleButtonSize: PropTypes.string,
     /**
+     * Size for semantic segment on rule
+     * https://react.semantic-ui.com/elements/segment/#variations-sizes
+     */
+    ruleSegmentSize: PropTypes.string,
+    /**
      * Size for semantic buttons on group
      * https://react.semantic-ui.com/elements/button/#variations-size
      */
     groupButtonSize: PropTypes.string,
     /**
-     * Size for semantic inputs
-     * https://react.semantic-ui.com/elements/input/#variations-size
+     * Size for semantic segment on group
+     * https://react.semantic-ui.com/elements/segment/#variations-sizes
      */
-    inputSize: PropTypes.string,
+    ruleGroupSegmentSize: PropTypes.string,
     /**
      * Size for inputs on rule
      * https://react.semantic-ui.com/elements/input/#variations-size
      */
-    ruleInputSize: PropTypes.string,
+    inputSize: PropTypes.string,
     query: PropTypes.object,
     /**
      *  The array of fields that should be used. Each field should be an object with
@@ -483,6 +498,14 @@ QueryBuilderSemantic.propTypes = {
     combinators: PropTypes.arrayOf(PropTypes.shape({
         value: PropTypes.string.isRequired,
         text: PropTypes.string.isRequired,
+    })),
+    /**
+     * The array of colors to use for the selected combinator
+     * https://react.semantic-ui.com/elements/segment/#variations-colored
+     */
+    combinatorColors: PropTypes.arrayOf(PropTypes.shape({
+        color: PropTypes.string.isRequired,
+        combinator: PropTypes.string.isRequired,
     })),
     /**
      * This is a custom controls object that allows you to override the control elements used. The following control overrides are supported

@@ -38,7 +38,7 @@ export default class ExampleCustomValueEditor extends React.Component {
                 if (this.props.operator === 'null' || this.props.operator === 'notNull') {
                     return null;
                 }
-                    return <Input error={!this.props.value} className={'rule--value'}
+                    return <Input error={!this.props.value}
                                   onChange={(e, { value }) => this.props.handleOnChange(value)} />
             }
         };

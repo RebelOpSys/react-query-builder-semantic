@@ -40,6 +40,31 @@ import QueryBuilderSemantic from 'react-query-builder-semantic/lib/QueryBuilderS
 
 `<QueryBuilderSemantic />` is the only top-level component exposed from this library. It supports the following properties:
 
+#### ruleButtonSize *(Required)*
+[Size](https://react.semantic-ui.com/elements/button/#variations-size) for semantic buttons on a rule
+
+Default is : 'tiny'
+
+#### ruleSegmentSize *(Required)*
+[Size](https://react.semantic-ui.com/elements/segment/#variations-sizes) for semantic segment on a rule
+
+Default is : 'tiny'
+
+#### groupButtonSize *(Required)*
+[Size](https://react.semantic-ui.com/elements/button/#variations-size) for semantic buttons on a group
+
+Default is : 'tiny'
+
+#### ruleGroupSegmentSize *(Required)*
+[Size](https://react.semantic-ui.com/elements/segment/#variations-sizes) for semantic segment on a group
+
+Default is : 'tiny'
+
+#### inputSize *(Required)*
+[Size](https://react.semantic-ui.com/elements/input/#variations-size) for semantic inputs on a rule
+
+Default is : 'tiny'
+
 #### fields *(Required)*
 [ {value:String, text:String} ]
 
@@ -78,6 +103,18 @@ The default set includes:
     {value: 'and', text: 'AND'},
     {value: 'or', text: 'OR'},
 ]
+```
+#### combinatorColors
+[ {color:String, combinator:String} ]
+
+The array of combinator colors to use for the selected combinator that should be used for RuleGroups.
+The default set includes:
+
+```js
+ combinatorColors: [
+        { color: 'purple', combinator: 'and' },
+        { color: 'blue', combinator: 'or' },
+    ]
 ```
 
 #### controlElements *(Optional)*

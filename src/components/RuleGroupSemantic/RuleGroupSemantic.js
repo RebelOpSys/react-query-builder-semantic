@@ -1,7 +1,7 @@
 import React from 'react';
 import Rule from '../RuleSemantic';
 import PropTypes from 'prop-types';
-import { Button, Dropdown } from 'semantic-ui-react';
+import { Button, Dropdown, Segment } from 'semantic-ui-react';
 
 /**
  * Default element to group rules for the QueryBuilder
@@ -9,21 +9,39 @@ import { Button, Dropdown } from 'semantic-ui-react';
 class RuleGroupSemantic extends React.Component {
     constructor(props) {
         super(props);
+        this.getColorForCombinator = this.getColorForCombinator.bind(this);
+    }
+
+    /**
+     * Based on the combinatorColors prop, will check the selected value of the combinator for the group
+     * and return the color for that combination
+     * @returns {String}
+     */
+    getColorForCombinator() {
+        const combination = this.props.combinatorColors.filter((colorCombination) => {
+            return colorCombination.combinator === this.props.combinator
+        });
+
+        if (combination) {
+            return combination[0].color;
+        }
     }
 
     render() {
         const {
             combinator, rules, translations, onRuleRemove, createRule, onRuleAdd, createRuleGroup, onGroupAdd, onGroupRemove,
-            isRuleGroup, getLevel, getOperators, onPropChange, schema: { combinators, classNames, groupButtonSize }
+            isRuleGroup, getLevel, getOperators, onPropChange,
+            schema: { combinators, classNames, groupButtonSize, ruleGroupSegmentSize }
         } = this.props;
         return (
             <div className={`${classNames.ruleGroupContainer}`}>
-                <div className={`${classNames.ruleGroup}`}>
-                    <Button.Group className={'group--header'} compact labeled icon size={groupButtonSize}>
+                <Segment.Group size={ruleGroupSegmentSize}  className={`${classNames.ruleGroup}`}>
+                    <div className={'group--header'}>
                         <Dropdown
                             button
+                            attached={'left'}
                             className={'icon'}
-                            floating
+                            size={groupButtonSize}
                             labeled
                             scrolling
                             onChange={this.onCombinatorChange}
@@ -32,12 +50,18 @@ class RuleGroupSemantic extends React.Component {
                             defaultValue={combinator}
                         />
                         <Button
+                            attached={'right'}
+                            size={groupButtonSize}
+                            compact
                             className={classNames.addRule}
                             icon={translations.addRule.icon}
                             content={translations.addRule.title}
                             onClick={this.addRule}
                         />
                         <Button
+                            attached
+                            size={groupButtonSize}
+                            compact
                             className={classNames.addGroup}
                             icon={translations.addGroup.icon}
                             content={translations.addGroup.title}
@@ -46,13 +70,16 @@ class RuleGroupSemantic extends React.Component {
                         {
                             this.hasParentGroup() ?
                                 <Button
+                                    attached={'right'}
+                                    compact
+                                    size={groupButtonSize}
                                     className={classNames.removeGroup}
                                     icon={translations.removeGroup.icon}
                                     content={translations.removeGroup.title}
                                     onClick={this.removeGroup}
                                 /> : null
                         }
-                    </Button.Group>
+                    </div>
                     <div className="group--children">
                         {
                             rules.map(rule => {
@@ -73,6 +100,7 @@ class RuleGroupSemantic extends React.Component {
                                                              createRule={createRule}
                                                              getOperators={getOperators}
                                                              combinator={rule.combinator}
+                                                             combinatorColors={this.props.combinatorColors}
                                                              translations={this.props.translations}
                                                              rules={rule.rules} />
                                         : <Rule key={rule.id}
@@ -81,6 +109,8 @@ class RuleGroupSemantic extends React.Component {
                                                 value={rule.value}
                                                 getOperators={getOperators}
                                                 onPropChange={onPropChange}
+                                                combinator={combinator}
+                                                combinatorColor={this.getColorForCombinator()}
                                                 getLevel={getLevel}
                                                 operator={rule.operator}
                                                 schema={this.props.schema}
@@ -91,7 +121,7 @@ class RuleGroupSemantic extends React.Component {
                             })
                         }
                     </div>
-                </div>
+                </Segment.Group>
             </div>
         );
     }
@@ -195,6 +225,49 @@ RuleGroupSemantic.propTypes = {
      * Current schema from QueryBuilder
      */
     schema: PropTypes.object,
+    /**
+     * This can be used to override translatable texts and
+     * icons applied to various controls that are created by the <QueryBuilderSemantic />
+     * https://react.semantic-ui.com/elements/icon/
+     */
+    translations: PropTypes.shape({
+        fields: PropTypes.shape({
+            title: PropTypes.string
+        }),
+        operators: PropTypes.shape({
+            title: PropTypes.string
+        }),
+        value: PropTypes.shape({
+            title: PropTypes.string
+        }),
+        removeRule: PropTypes.shape({
+            icon: PropTypes.string,
+            title: PropTypes.string
+        }),
+        removeGroup: PropTypes.shape({
+            icon: PropTypes.string,
+            title: PropTypes.string
+        }),
+        addRule: PropTypes.shape({
+            icon: PropTypes.string,
+            title: PropTypes.string
+        }),
+        addGroup: PropTypes.shape({
+            icon: PropTypes.string,
+            title: PropTypes.string
+        }),
+        combinators: PropTypes.shape({
+            title: PropTypes.string
+        })
+    }),
+    /**
+     * The array of colors to use for the selected combinator
+     * https://react.semantic-ui.com/elements/segment/#variations-colored
+     */
+    combinatorColors: PropTypes.arrayOf(PropTypes.shape({
+        color: PropTypes.string.isRequired,
+        combinator: PropTypes.string.isRequired,
+    })),
 };
 
 RuleGroupSemantic.defaultProps = {

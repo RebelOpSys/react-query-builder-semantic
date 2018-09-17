@@ -23,8 +23,8 @@
     position: relative;
 }
 .group-or-rule-container {
-    margin-bottom: 10px;
-    padding-right: 10px;
+    /*margin-bottom: 10px;*/
+    /*padding-right: 10px;*/
 }
 /******************************************************************************/
 /** RULE **********************************************************************/
@@ -32,24 +32,12 @@
 .rule--header {
     float: right;
 }
-.rule--field, .rule--operator, .rule--value, .rule--operator-options, .rule--widget, .widget--widget, .widget--valuesrc, .widget--sep, .operator--options--sep {
-    display: inline-block;
-}
-.rule--operator, .rule--value, .widget--widget, .widget--valuesrc, .widget--sep {
-    margin-left: 10px;
-}
 .operator--options--sep {
     margin-right: 10px;
 }
 div.tooltip-inner {
     max-width: 500px;
 }
-/*.rule--field label, .rule--operator label, .widget--widget label {*/
-    /*display: block;*/
-    /*font-weight: bold;*/
-/*}*/
-
-
 .rule--header:after {
     content: "";
     display: table;
