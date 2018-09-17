@@ -1,7 +1,7 @@
 import React from 'react';
 import 'semantic-ui-css/semantic.min.css';
 import QueryBuilderSemantic from 'react-query-builder-semantic/lib/QueryBuilderSemantic';
-import { Checkbox, Input } from 'semantic-ui-react';
+import {  Input } from 'semantic-ui-react';
 
 
 const fields = [
@@ -11,8 +11,6 @@ const fields = [
     { value: 'address', text: 'Address' },
     { value: 'phone', text: 'Phone' },
     { value: 'email', text: 'Email' },
-    { value: 'twitter', text: 'Twitter' },
-    { value: 'isDev', text: 'Is a Developer?' },
 ];
 
 /** QueryBuilderSemantic with custom value editor    */
@@ -40,16 +38,8 @@ export default class ExampleCustomValueEditor extends React.Component {
                 if (this.props.operator === 'null' || this.props.operator === 'notNull') {
                     return null;
                 }
-
-                if (this.props.field !== 'isDev') {
                     return <Input error={!this.props.value} className={'rule--value'}
                                   onChange={(e, { value }) => this.props.handleOnChange(value)} />
-                }
-
-                return (
-                    <Checkbox toggle value={this.props.value || false} checked={!!this.props.value}
-                              onChange={(e, { value }) => this.props.handleOnChange(value)} />
-                );
             }
         };
         return customValue;
