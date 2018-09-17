@@ -14,39 +14,268 @@ Thanks to [coryhouse](https://github.com/coryhouse/ps-react) for providing the m
 npm install react-query-builder-semantic --save
 ```
 
-## Coming Soon
-- [Semantic UI React Integration](https://react.semantic-ui.com/)
+## [Semantic UI React Integration](https://react.semantic-ui.com/)
+- [Setting up Semantic](https://react.semantic-ui.com/usage)
 
 ## Documentation
 [Component documentation](https://rebelopsys.github.io/react-query-builder-semantic/)
 
+<details>
+<summary>Query Builder Semantic API</summary>
+
 ## Usage
 
+Import QueryBuilderSemantic with default styles.
 ```jsx
-import QueryBuilder from 'react-query-builder-semantic/lib/QueryBuilder';
-
-const fields = [
-    {name: 'firstName', label: 'First Name'},
-    {name: 'lastName', label: 'Last Name'},
-    {name: 'age', label: 'Age'},
-    {name: 'address', label: 'Address'},
-    {name: 'phone', label: 'Phone'},
-    {name: 'email', label: 'Email'},
-    {name: 'twitter', label: 'Twitter'},
-    {name: 'isDev', label: 'Is a Developer?', value: false},
-];
-
-const dom = <QueryBuilder fields={fields}
-                          onQueryChange={logQuery}/>
-
-
-function logQuery(query) {
-    console.log(query);
-}
-
+import 'semantic-ui-css/semantic.min.css';
+import QueryBuilderSemantic from 'react-query-builder-semantic/lib/QueryBuilderSemantic';
 ```
 
-## API
+Import QueryBuilderSemantic without styles.
+```jsx
+import 'semantic-ui-css/semantic.min.css';
+import QueryBuilderSemantic from 'react-query-builder-semantic/lib/QueryBuilderSemantic/QueryBuilderSemantic';
+```
+## QueryBuilderSemantic
+
+`<QueryBuilderSemantic />` is the only top-level component exposed from this library. It supports the following properties:
+
+#### fields *(Required)*
+[ {value:String, text:String} ]
+
+The array of fields that should be used. Each field should be an object with
+
+`{value:String, text:String}`
+
+#### operators *(Optional)*
+[ {value:String, text:String} ]
+
+The array of operators that should be used. The default operators include:
+
+```js
+[
+    { value: 'null', text: 'Is Null' },
+    { value: 'notNull', text: 'Is Not Null' },
+    { value: 'in', text: 'In' },
+    { value: 'notIn', text: 'Not In' },
+    { value: '=', text: '=' },
+    { value: '!=', text: '!=' },
+    { value: '<', text: '<' },
+    { value: '>', text: '>' },
+    { value: '<=', text: '<=' },
+    { value: '>=', text: '>=' },
+]
+```
+
+#### combinators *(Optional)*
+[ {value:String, text:String} ]
+
+The array of combinators that should be used for RuleGroups.
+The default set includes:
+
+```js
+[
+    {value: 'and', text: 'AND'},
+    {value: 'or', text: 'OR'},
+]
+```
+
+#### controlElements *(Optional)*
+```js
+React.PropTypes.shape({
+  fieldSelector: React.PropTypes.func, //returns ReactClass
+  operatorSelector: React.PropTypes.func, //returns ReactClass
+  valueEditor: React.PropTypes.func //returns ReactClass
+})
+```
+
+This is a custom controls object that allows you to override the control elements used.
+The following control overrides are supported:
+- `fieldSelector`: By default a `<Dropdown />` is used. The following props are passed:
+
+  ```js
+  {
+    options: React.PropTypes.array.isRequired, //same as 'fields' passed into QueryBuilderSemantic
+    value: React.PropTypes.string, //selected field from the existing query representation, if any
+    className: React.PropTypes.string, //css classNames to be applied
+    handleOnChange: React.PropTypes.func, //callback function to update query representation
+    level: React.PropTypes.number //The level the group this rule belongs to
+  }
+  ```
+- `operatorSelector`: By default a `<<Dropdown scrolling selection search />` is used. The following props are passed:
+
+  ```js
+  {
+    field: React.PropTypes.string, //field name corresponding to this Rule
+    options: React.PropTypes.array.isRequired, //return value of getOperators(field)
+    value: React.PropTypes.string, //selected operator from the existing query representation, if any
+    className: React.PropTypes.string, //css classNames to be applied
+    handleOnChange: React.PropTypes.func //callback function to update query representation
+  }
+  ```
+- `valueEditor`: By default a `<Input type="text" />` is used. The following props are passed:
+
+  ```js
+  {
+    field: React.PropTypes.string, //field name corresponding to this Rule
+    size: PropTypes.string, //semantic size for field default is 'tiny'
+    operator: React.PropTypes.string, //operator name corresponding to this Rule
+    value: React.PropTypes.string, //value from the existing query representation, if any
+    handleOnChange: React.PropTypes.func //callback function to update the query representation
+  }
+  ```
+
+#### getOperators *(Optional)*
+function(field):[]
+
+This is a callback function invoked to get the list of allowed operators
+for the given field
+
+#### onQueryChange *(Optional)*
+function(queryJSON):void
+
+This is a notification that is invoked anytime the query configuration changes. The
+query is provided as a JSON structure, as shown below:
+
+```json
+{
+  "combinator": "and",
+  "rules": [
+    {
+      "field": "firstName",
+      "operator": "null",
+      "value": ""
+    },
+    {
+      "field": "lastName",
+      "operator": "null",
+      "value": ""
+    },
+    {
+      "combinator": "and",
+      "rules": [
+        {
+          "field": "age",
+          "operator": ">",
+          "value": "30"
+        }
+      ]
+    }
+  ]
+}
+```
+
+#### controlClassnames *(Optional)*
+This can be used to assign specific `CSS` classes to various controls
+that are created by the `<QueryBuilderSemantic />`. This is an object
+with the following properties:
+
+```js
+{
+     /**
+    *Root <div> element
+    */
+   queryBuilder: PropTypes.string,
+   /**
+    *<div> containing the RuleGroup
+    */
+   ruleGroup: PropTypes.string,
+   /**
+    *<select> control for combinators
+    */
+   combinators: PropTypes.string,
+   /**
+    *<button> to add a Rule
+    */
+   addRule: PropTypes.string,
+   /**
+    *<button> to add a RuleGroup
+    */
+   addGroup: PropTypes.string,
+   /**
+    *<button> to remove a RuleGroup
+    */
+   removeGroup: PropTypes.string,
+   /**
+    *<div> containing the Rule
+    */
+   rule: PropTypes.string,
+   /**
+    *<select> control for fields
+    */
+   fields: PropTypes.string,
+   /**
+    *<select> control for operators
+    */
+   operators: PropTypes.string,
+   /**
+    *<input> for the field value
+    */
+   value: PropTypes.string,
+   /**
+    *<button> to remove a Rule
+    */
+   removeRule: PropTypes.string,
+}
+```
+
+#### translations *(Optional)*
+This can be used to override translatable texts applied to various controls
+that are created by the `<QueryBuilderSemantic />`. This is an object
+with the following properties:
+
+```js
+{
+     fields: {
+        title: "Fields",
+    },
+    operators: {
+        title: "Operators",
+    },
+    value: {
+        title: "Value",
+    },
+    removeRule: {
+        icon: "remove",
+        title: "Remove rule",
+    },
+    removeGroup: {
+        icon: "minus",
+        title: "Remove group",
+    },
+    addRule: {
+        icon: "plus",
+        title: "Add rule",
+    },
+    addGroup: {
+        icon: "plus",
+        title: "Add group",
+    },
+    combinators: {
+        icon: 'filter',
+        title: "Combinators",
+    }
+}
+```
+</details>
+
+
+
+<details>
+<summary>Query Builder API</summary>
+
+## Usage
+
+Import QueryBuilder with default styles.
+```jsx
+import QueryBuilder from 'react-query-builder-semantic/lib/QueryBuilder';
+```
+
+Import QueryBuilder without styles.
+```jsx
+import QueryBuilder from 'react-query-builder-semantic/lib/QueryBuilder/QueryBuilder';
+```
+## QueryBuilder
 
 `<QueryBuilder />` is the only top-level component exposed from this library. It supports the following properties:
 
@@ -246,19 +475,50 @@ with the following properties:
 
 ```js
 {
-    queryBuilder:String, // Root <div> element
-
-    ruleGroup:String, // <div> containing the RuleGroup
-    combinators:String, // <select> control for combinators
-    addRule:String, // <button> to add a Rule
-    addGroup:String, // <button> to add a RuleGroup
-    removeGroup:String, // <button> to remove a RuleGroup
-
-    rule:String, // <div> containing the Rule
-    fields:String, // <select> control for fields
-    operators:String, // <select> control for operators
-    value:String, // <input> for the field value
-    removeRule:String // <button> to remove a Rule
+    /**
+    *Root <div> element
+    */
+   queryBuilder: PropTypes.string,
+   /**
+    *<div> containing the RuleGroup
+    */
+   ruleGroup: PropTypes.string,
+   /**
+    *<select> control for combinators
+    */
+   combinators: PropTypes.string,
+   /**
+    *<button> to add a Rule
+    */
+   addRule: PropTypes.string,
+   /**
+    *<button> to add a RuleGroup
+    */
+   addGroup: PropTypes.string,
+   /**
+    *<button> to remove a RuleGroup
+    */
+   removeGroup: PropTypes.string,
+   /**
+    *<div> containing the Rule
+    */
+   rule: PropTypes.string,
+   /**
+    *<select> control for fields
+    */
+   fields: PropTypes.string,
+   /**
+    *<select> control for operators
+    */
+   operators: PropTypes.string,
+   /**
+    *<input> for the field value
+    */
+   value: PropTypes.string,
+   /**
+    *<button> to remove a Rule
+    */
+   removeRule: PropTypes.string,
 
 }
 ```
@@ -300,3 +560,4 @@ with the following properties:
     }
 }
 ```
+</details>

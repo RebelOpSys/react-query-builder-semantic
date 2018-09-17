@@ -57,7 +57,6 @@ export default class ExampleQuery extends React.Component {
                 <div className="scroll">
                     <QueryBuilderSemantic fields={fields}
                                           query={this.state.query}
-                                          controlClassnames={{ fields: 'form-control' }}
                                           onQueryChange={this.logQuery} />
                 </div>
                 <div className="shrink query-log scroll">

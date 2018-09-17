@@ -6,6 +6,7 @@ import RuleGroup from '../RuleGroup';
 import ActionElement from '../ActionElement';
 import ValueSelector from '../ValueSelector';
 import ValueEditor from '../ValueEditor';
+import _ from 'lodash';
 
 /**
  * QueryBuilder is an UI component to create queries and filters.
@@ -27,6 +28,7 @@ class QueryBuilder extends React.Component {
         this.onRuleRemove = this._notifyQueryChange.bind(this, this.onRuleRemove);
         this.onGroupRemove = this._notifyQueryChange.bind(this, this.onGroupRemove);
         this.onPropChange = this._notifyQueryChange.bind(this, this.onPropChange);
+        this.mergeProperties = this.mergeProperties.bind(this);
         this.getLevel = this.getLevel.bind(this);
         this.isRuleGroup = this.isRuleGroup.bind(this);
         this.getOperators = this.getOperators.bind(this);
@@ -46,10 +48,25 @@ class QueryBuilder extends React.Component {
 
     }
 
+    /**
+     * Checks the values passed as props to override the default values if specified
+     * @param defaultValues
+     * @param passedValues
+     * @returns {*}
+     */
+    mergeProperties(defaultValues, passedValues) {
+        return _.mergeWith(defaultValues, passedValues, function (objValue, srcValue) {
+            if (srcValue) {
+                return srcValue;
+            }
+            return objValue;
+        });
+    }
+
     componentWillMount() {
         const { fields, operators, combinators, controlElements, controlClassNames } = this.props;
-        const classNames = Object.assign({}, QueryBuilder.defaultControlClassNames, controlClassNames);
-        const controls = Object.assign({}, QueryBuilder.defaultControlElements, controlElements);
+        const classNames = this.mergeProperties(QueryBuilder.defaultControlClassNames, controlClassNames);
+        const controls = this.mergeProperties(QueryBuilder.defaultControlElements, controlElements);
         this.setState({
             root: this.getInitialQuery(),
             schema: {
@@ -158,6 +175,11 @@ class QueryBuilder extends React.Component {
         this.setState({ root: this.state.root });
     }
 
+    /**
+     * Removes the given rule by id from the tree
+     * @param ruleId
+     * @param parentId
+     */
     onRuleRemove(ruleId, parentId) {
         const parent = this._findRule(parentId, this.state.root);
         const index = parent.rules.findIndex(x => x.id === ruleId);
@@ -166,6 +188,11 @@ class QueryBuilder extends React.Component {
         this.setState({ root: this.state.root });
     }
 
+    /**
+     * Removes the given group by id from the tree
+     * @param groupId
+     * @param parentId
+     */
     onGroupRemove(groupId, parentId) {
         const parent = this._findRule(parentId, this.state.root);
         const index = parent.rules.findIndex(x => x.id === groupId);
@@ -178,6 +205,14 @@ class QueryBuilder extends React.Component {
         return this._getLevel(id, 0, this.state.root)
     }
 
+    /**
+     * Searches in the root tree for rules for the id specified and returns the index of the found rule
+     * @param id
+     * @param index
+     * @param root
+     * @returns {number}
+     * @private
+     */
     _getLevel(id, index, root) {
         let foundAtIndex = -1;
         if (root.id === id) {
@@ -196,6 +231,13 @@ class QueryBuilder extends React.Component {
 
     }
 
+    /**
+     * Searches the rule group for the given rule id
+     * @param id
+     * @param parent
+     * @returns {*}
+     * @private
+     */
     _findRule(id, parent) {
         if (parent.id === id) {
             return parent;
@@ -214,6 +256,13 @@ class QueryBuilder extends React.Component {
 
     }
 
+    /**
+     * Any callback change in the tree that is made, remove,add, change of rule or group the query is cloned
+     * and updated
+     * @param fn
+     * @param args
+     * @private
+     */
     _notifyQueryChange(fn, ...args) {
         if (fn) {
             fn.call(this, ...args);
@@ -227,7 +276,6 @@ class QueryBuilder extends React.Component {
     }
 
     static get defaultTranslations() {
-
         return {
             fields: {
                 title: "Fields",
@@ -261,7 +309,6 @@ class QueryBuilder extends React.Component {
     }
 
     static get defaultOperators() {
-
         return [
             { name: 'null', label: 'Is Null' },
             { name: 'notNull', label: 'Is Not Null' },
@@ -277,7 +324,6 @@ class QueryBuilder extends React.Component {
     }
 
     static get defaultCombinators() {
-
         return [
             { name: 'and', label: 'AND' },
             { name: 'or', label: 'OR' },
@@ -321,16 +367,88 @@ class QueryBuilder extends React.Component {
 
 }
 
+QueryBuilder.displayName = 'QueryBuilder';
+
 QueryBuilder.defaultProps = {
     query: null,
     fields: [],
-    operators: QueryBuilder.defaultOperators,
-    combinators: QueryBuilder.defaultCombinators,
-    translations: QueryBuilder.defaultTranslations,
-    controlElements: QueryBuilder.defaultControlElements,
-    getOperators: null,
-    onQueryChange: null,
-    controlClassNames: QueryBuilder.defaultControlClassNames
+    operators: [
+        { name: 'null', label: 'Is Null' },
+        { name: 'notNull', label: 'Is Not Null' },
+        { name: 'in', label: 'In' },
+        { name: 'notIn', label: 'Not In' },
+        { name: '=', label: '=' },
+        { name: '!=', label: '!=' },
+        { name: '<', label: '<' },
+        { name: '>', label: '>' },
+        { name: '<=', label: '<=' },
+        { name: '>=', label: '>=' },
+    ],
+    combinators: [
+        { name: 'and', label: 'AND' },
+        { name: 'or', label: 'OR' },
+    ],
+    translations: {
+        fields: {
+            title: "Fields",
+        },
+        operators: {
+            title: "Operators",
+        },
+        value: {
+            title: "Value",
+        },
+        removeRule: {
+            label: "x",
+            title: "Remove rule",
+        },
+        removeGroup: {
+            label: "x",
+            title: "Remove group",
+        },
+        addRule: {
+            label: "+Rule",
+            title: "Add rule",
+        },
+        addGroup: {
+            label: "+Group",
+            title: "Add group",
+        },
+        combinators: {
+            title: "Combinators",
+        },
+        controlElements: {
+            addGroupAction: ActionElement,
+            removeGroupAction: ActionElement,
+            addRuleAction: ActionElement,
+            removeRuleAction: ActionElement,
+            combinatorSelector: ValueSelector,
+            fieldSelector: ValueSelector,
+            operatorSelector: ValueSelector,
+            valueEditor: ValueEditor
+        },
+        getOperators: null,
+        onQueryChange: null,
+        controlClassNames: {
+            queryBuilder: 'query-builder',
+            removeRule: 'rule--remove',
+            ruleGroup: 'group group-or-rule',
+            ruleGroupHeader: 'group--header',
+            ruleGroupContainer: 'group-or-rule-container group-container',
+            ruleGroupCombinators: 'group--combinators',
+            combinators: 'ruleGroup--combinators',
+            ruleGroupActions: 'group--actions',
+            addRule: 'ruleGroup--addRule',
+            addGroup: 'ruleGroup--addGroup',
+            removeGroup: 'ruleGroup--removeGroup',
+            rule: 'rule group-or-rule',
+            ruleHeader: 'rule--header',
+            ruleContainer: 'group-or-rule-container rule-container',
+            fields: 'rule--field',
+            operators: 'rule--operator',
+            value: 'rule--value',
+        }
+    }
 };
 
 QueryBuilder.propTypes = {
@@ -362,14 +480,14 @@ QueryBuilder.propTypes = {
      * This is a custom controls object that allows you to override the control elements used. The following control overrides are supported
      */
     controlElements: PropTypes.shape({
-        addGroupAction: PropTypes.func,
-        removeGroupAction: PropTypes.func,
-        addRuleAction: PropTypes.func,
-        removeRuleAction: PropTypes.func,
-        combinatorSelector: PropTypes.func,
-        fieldSelector: PropTypes.func,
-        operatorSelector: PropTypes.func,
-        valueEditor: PropTypes.func
+        addGroupAction: PropTypes.func,//returns ReactClass
+        removeGroupAction: PropTypes.func,//returns ReactClass
+        addRuleAction: PropTypes.func,//returns ReactClass
+        removeRuleAction: PropTypes.func,//returns ReactClass
+        combinatorSelector: PropTypes.func,//returns ReactClass
+        fieldSelector: PropTypes.func,//returns ReactClass
+        operatorSelector: PropTypes.func,//returns ReactClass
+        valueEditor: PropTypes.func//returns ReactClass
     }),
     /**
      * This is a callback function invoked to get the list of allowed operators for the given field

@@ -5,6 +5,8 @@ import PropTypes from 'prop-types';
 import RuleGroup from '../RuleGroupSemantic';
 import ValueSelector from '../ValueSelectorSemantic';
 import ValueEditor from '../ValueEditorSemantic';
+import _ from 'lodash';
+
 
 /**
  * QueryBuilderSemantic is QueryBuilder with react.semantic-ui components.
@@ -26,6 +28,7 @@ class QueryBuilderSemantic extends React.Component {
         this.onRuleRemove = this._notifyQueryChange.bind(this, this.onRuleRemove);
         this.onGroupRemove = this._notifyQueryChange.bind(this, this.onGroupRemove);
         this.onPropChange = this._notifyQueryChange.bind(this, this.onPropChange);
+        this.mergeProperties = this.mergeProperties.bind(this);
         this.getLevel = this.getLevel.bind(this);
         this.isRuleGroup = this.isRuleGroup.bind(this);
         this.getOperators = this.getOperators.bind(this);
@@ -45,10 +48,25 @@ class QueryBuilderSemantic extends React.Component {
 
     }
 
+    /**
+     * Checks the values passed as props to override the default values if specified
+     * @param defaultValues
+     * @param passedValues
+     * @returns {*}
+     */
+    mergeProperties(defaultValues, passedValues) {
+        return _.mergeWith(defaultValues, passedValues, function (objValue, srcValue) {
+            if (srcValue) {
+                return srcValue;
+            }
+            return objValue;
+        });
+    }
+
     componentWillMount() {
-        const { fields, operators, combinators, controlElements, controlClassNames, groupButtonSize,ruleButtonSize, inputSize } = this.props;
-        const classNames = Object.assign({}, QueryBuilderSemantic.defaultControlClassNames, controlClassNames);
-        const controls = Object.assign({}, QueryBuilderSemantic.defaultControlElements, controlElements);
+        const { fields, operators, combinators, controlElements, controlClassNames, groupButtonSize, ruleButtonSize, inputSize } = this.props;
+        const classNames = this.mergeProperties(QueryBuilderSemantic.defaultControlClassNames, controlClassNames);
+        const controls = this.mergeProperties(QueryBuilderSemantic.defaultControlElements, controlElements);
         this.setState({
             root: this.getInitialQuery(),
             schema: {
@@ -78,7 +96,7 @@ class QueryBuilderSemantic extends React.Component {
         const { translations } = this.props;
 
         return (
-            <div className={`query-builder ${schema.classNames.queryBuilder}`}>
+            <div className={`${schema.classNames.queryBuilder}`}>
                 <RuleGroup
                     translations={translations}
                     rules={rules}
@@ -160,6 +178,11 @@ class QueryBuilderSemantic extends React.Component {
         this.setState({ root: this.state.root });
     }
 
+    /**
+     * Removes the given rule by id from the tree
+     * @param ruleId
+     * @param parentId
+     */
     onRuleRemove(ruleId, parentId) {
         const parent = this._findRule(parentId, this.state.root);
         const index = parent.rules.findIndex(x => x.id === ruleId);
@@ -168,6 +191,11 @@ class QueryBuilderSemantic extends React.Component {
         this.setState({ root: this.state.root });
     }
 
+    /**
+     * Removes the given group by id from the tree
+     * @param groupId
+     * @param parentId
+     */
     onGroupRemove(groupId, parentId) {
         const parent = this._findRule(parentId, this.state.root);
         const index = parent.rules.findIndex(x => x.id === groupId);
@@ -180,6 +208,14 @@ class QueryBuilderSemantic extends React.Component {
         return this._getLevel(id, 0, this.state.root)
     }
 
+    /**
+     * Searches in the root tree for rules for the id specified and returns the index of the found rule
+     * @param id
+     * @param index
+     * @param root
+     * @returns {number}
+     * @private
+     */
     _getLevel(id, index, root) {
         let foundAtIndex = -1;
         if (root.id === id) {
@@ -198,6 +234,13 @@ class QueryBuilderSemantic extends React.Component {
 
     }
 
+    /**
+     * Searches the rule group for the given rule id
+     * @param id
+     * @param parent
+     * @returns {*}
+     * @private
+     */
     _findRule(id, parent) {
         if (parent.id === id) {
             return parent;
@@ -216,6 +259,13 @@ class QueryBuilderSemantic extends React.Component {
 
     }
 
+    /**
+     * Any callback change in the tree that is made, remove,add, change of rule or group the query is cloned
+     * and updated
+     * @param fn
+     * @param args
+     * @private
+     */
     _notifyQueryChange(fn, ...args) {
         if (fn) {
             fn.call(this, ...args);
@@ -256,7 +306,7 @@ class QueryBuilderSemantic extends React.Component {
                 title: "Add group",
             },
             combinators: {
-                icon: 'code branch',
+                icon: 'filter',
                 title: "Combinators",
             }
         }
@@ -311,19 +361,82 @@ class QueryBuilderSemantic extends React.Component {
 
 }
 
+QueryBuilderSemantic.displayName = 'QueryBuilderSemantic';
+
 QueryBuilderSemantic.defaultProps = {
     query: null,
     fields: [],
-    operators: QueryBuilderSemantic.defaultOperators,
-    combinators: QueryBuilderSemantic.defaultCombinators,
-    translations: QueryBuilderSemantic.defaultTranslations,
-    controlElements: QueryBuilderSemantic.defaultControlElements,
+    operators: [
+        { value: 'null', text: 'Is Null' },
+        { value: 'notNull', text: 'Is Not Null' },
+        { value: 'in', text: 'In' },
+        { value: 'notIn', text: 'Not In' },
+        { value: '=', text: '=' },
+        { value: '!=', text: '!=' },
+        { value: '<', text: '<' },
+        { value: '>', text: '>' },
+        { value: '<=', text: '<=' },
+        { value: '>=', text: '>=' },
+    ],
+    combinators: [
+        { value: 'and', text: 'AND' },
+        { value: 'or', text: 'OR' },
+    ],
+    translations: {
+        fields: {
+            title: "Fields",
+        },
+        operators: {
+            title: "Operators",
+        },
+        value: {
+            title: "Value",
+        },
+        removeRule: {
+            icon: "remove",
+            title: "Remove rule",
+        },
+        removeGroup: {
+            icon: "minus",
+            title: "Remove group",
+        },
+        addRule: {
+            icon: "plus",
+            title: "Add rule",
+        },
+        addGroup: {
+            icon: "plus",
+            title: "Add group",
+        },
+        combinators: {
+            icon: 'filter',
+            title: "Combinators",
+        }
+    },
+    controlElements: {
+        fieldSelector: ValueSelector,
+        operatorSelector: ValueSelector,
+        valueEditor: ValueEditor
+    },
     getOperators: null,
     onQueryChange: null,
     ruleButtonSize: 'tiny',
-    groupButtonSize:'tiny',
+    groupButtonSize: 'tiny',
     ruleInputSize: 'tiny',
-    controlClassNames: QueryBuilderSemantic.defaultControlClassNames
+    controlClassNames: {
+        queryBuilder: 'query-builder',
+        ruleGroup: 'group group-or-rule',
+        ruleGroupContainer: 'group-or-rule-container group-container',
+        combinators: 'ruleGroup-combinators',
+        addRule: 'ruleGroup-addRule',
+        addGroup: 'ruleGroup-addGroup',
+        removeGroup: 'ruleGroup-removeGroup',
+        rule: 'rule group-or-rule',
+        ruleContainer: 'group-or-rule-container rule-container',
+        fields: 'rule--field',
+        operators: 'rule--operator',
+        value: 'rule--value',
+    }
 };
 
 QueryBuilderSemantic.propTypes = {
@@ -342,6 +455,11 @@ QueryBuilderSemantic.propTypes = {
      * https://react.semantic-ui.com/elements/input/#variations-size
      */
     inputSize: PropTypes.string,
+    /**
+     * Size for inputs on rule
+     * https://react.semantic-ui.com/elements/input/#variations-size
+     */
+    ruleInputSize: PropTypes.string,
     query: PropTypes.object,
     /**
      *  The array of fields that should be used. Each field should be an object with
@@ -370,9 +488,9 @@ QueryBuilderSemantic.propTypes = {
      * This is a custom controls object that allows you to override the control elements used. The following control overrides are supported
      */
     controlElements: PropTypes.shape({
-        fieldSelector: PropTypes.func,
-        operatorSelector: PropTypes.func,
-        valueEditor: PropTypes.func
+        fieldSelector: PropTypes.func,//returns ReactClass
+        operatorSelector: PropTypes.func,//returns ReactClass
+        valueEditor: PropTypes.func//returns ReactClass
     }),
     /**
      * This is a callback function invoked to get the list of allowed operators for the given field

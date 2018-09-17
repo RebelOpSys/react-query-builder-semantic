@@ -42,7 +42,7 @@ export default class ExampleCustomValueEditor extends React.Component {
                 }
 
                 if (this.props.field !== 'isDev') {
-                    return <Input error={!this.props.value} compact={true}
+                    return <Input error={!this.props.value} className={'rule--value'}
                                   onChange={(e, { value }) => this.props.handleOnChange(value)} />
                 }
 
@@ -66,7 +66,6 @@ export default class ExampleCustomValueEditor extends React.Component {
                                           query={this.state.query}
                                           buttonSize={'mini'}
                                           controlElements={controlElements}
-                                          controlClassnames={{ fields: 'form-control' }}
                                           onQueryChange={this.logQuery} />
                 </div>
                 <div className="shrink query-log scroll">

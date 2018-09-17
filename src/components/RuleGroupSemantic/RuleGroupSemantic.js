@@ -14,45 +14,45 @@ class RuleGroupSemantic extends React.Component {
     render() {
         const {
             combinator, rules, translations, onRuleRemove, createRule, onRuleAdd, createRuleGroup, onGroupAdd, onGroupRemove,
-            isRuleGroup, getLevel, getOperators, onPropChange, schema: { combinators, classNames,groupButtonSize }
+            isRuleGroup, getLevel, getOperators, onPropChange, schema: { combinators, classNames, groupButtonSize }
         } = this.props;
         return (
             <div className={`${classNames.ruleGroupContainer}`}>
                 <div className={`${classNames.ruleGroup}`}>
-                        <Button.Group className={'group--header'} compact labeled icon size={groupButtonSize}>
-                            <Dropdown
-                                button
-                                className={'icon'}
-                                floating
-                                labeled
-                                scrolling
-                                onChange={this.onCombinatorChange}
-                                icon={translations.combinators.icon}
-                                options={combinators}
-                                defaultValue={combinator}
-                            />
-                            <Button
-                                className={classNames.addRule}
-                                icon={translations.addRule.icon}
-                                content={translations.addRule.title}
-                                onClick={this.addRule}
-                            />
-                            <Button
-                                className={classNames.addGroup}
-                                icon={translations.addGroup.icon}
-                                content={translations.addGroup.title}
-                                onClick={this.addGroup}
-                            />
-                            {
-                                this.hasParentGroup() ?
-                                    <Button
-                                        className={classNames.removeGroup}
-                                        icon={translations.removeGroup.icon}
-                                        content={translations.removeGroup.title}
-                                        onClick={this.removeGroup}
-                                    /> : null
-                            }
-                        </Button.Group>
+                    <Button.Group className={'group--header'} compact labeled icon size={groupButtonSize}>
+                        <Dropdown
+                            button
+                            className={'icon'}
+                            floating
+                            labeled
+                            scrolling
+                            onChange={this.onCombinatorChange}
+                            icon={translations.combinators.icon}
+                            options={combinators}
+                            defaultValue={combinator}
+                        />
+                        <Button
+                            className={classNames.addRule}
+                            icon={translations.addRule.icon}
+                            content={translations.addRule.title}
+                            onClick={this.addRule}
+                        />
+                        <Button
+                            className={classNames.addGroup}
+                            icon={translations.addGroup.icon}
+                            content={translations.addGroup.title}
+                            onClick={this.addGroup}
+                        />
+                        {
+                            this.hasParentGroup() ?
+                                <Button
+                                    className={classNames.removeGroup}
+                                    icon={translations.removeGroup.icon}
+                                    content={translations.removeGroup.title}
+                                    onClick={this.removeGroup}
+                                /> : null
+                        }
+                    </Button.Group>
                     <div className="group--children">
                         {
                             rules.map(rule => {

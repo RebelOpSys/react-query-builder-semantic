@@ -27,9 +27,13 @@ ValueEditorSemantic.displayName = 'ValueEditorSemantic';
 
 ValueEditorSemantic.propTypes = {
     /**
-     *
+     * //field name corresponding to this Rule
      */
     field: PropTypes.string,
+    /**
+     * https://react.semantic-ui.com/elements/input/#variations-size
+     */
+    size: PropTypes.string,
     /**
      * operator name corresponding to Rule using the element
      */
