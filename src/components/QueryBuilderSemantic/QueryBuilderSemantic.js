@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import RuleGroup from '../RuleGroupSemantic';
 import ValueSelector from '../ValueSelectorSemantic';
 import ValueEditor from '../ValueEditorSemantic';
-import { Segment } from 'semantic-ui-react';
+import { Label, Segment } from 'semantic-ui-react';
 import _ from 'lodash';
 
 
@@ -387,8 +387,16 @@ QueryBuilderSemantic.defaultProps = {
         { color: 'blue', combinator: 'or' },
     ],
     combinators: [
-        { value: 'and', text: 'AND' },
-        { value: 'or', text: 'OR' },
+        {
+            text: 'AND',
+            value: 'and',
+            content: <Label color={'purple'} content='AND' circular />,
+        },
+        {
+            text: 'OR',
+            value: 'or',
+            content: <Label color={'blue'} content='OR' circular />,
+        }
     ],
     translations: {
         fields: {
@@ -497,6 +505,7 @@ QueryBuilderSemantic.propTypes = {
      */
     combinators: PropTypes.arrayOf(PropTypes.shape({
         value: PropTypes.string.isRequired,
+        content:PropTypes.any,
         text: PropTypes.string.isRequired,
     })),
     /**

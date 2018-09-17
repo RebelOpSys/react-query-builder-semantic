@@ -93,15 +93,23 @@ The array of operators that should be used. The default operators include:
 ```
 
 #### combinators *(Optional)*
-[ {value:String, text:String} ]
+[ {value:String, text:String},{content:any} ]
 
 The array of combinators that should be used for RuleGroups.
 The default set includes:
 
 ```js
 [
-    {value: 'and', text: 'AND'},
-    {value: 'or', text: 'OR'},
+    {
+       text: 'AND',
+       value: 'and',
+       content: <Label color={'purple'} content='AND' circular />,
+   },
+   {
+       text: 'OR',
+       value: 'or',
+       content: <Label color={'blue'} content='OR' circular />,
+   }
 ]
 ```
 #### combinatorColors
