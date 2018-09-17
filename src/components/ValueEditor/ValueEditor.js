@@ -24,7 +24,7 @@ ValueEditor.displayName = 'ValueEditor';
 
 ValueEditor.propTypes = {
     /**
-     *
+     * field name corresponding to this Rule
      */
     field: PropTypes.string,
     /**
