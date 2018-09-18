@@ -10,6 +10,38 @@ import { Label, Segment } from 'semantic-ui-react';
 import _ from 'lodash';
 
 
+function queryToString(query) {
+    if (!query) {
+        return '';
+    }
+
+    let i, length;
+    let result;
+
+    if (query.type === 'group') {
+        result = '(';
+
+        for (i = 0, length = query.rules.length; i < length; ++i) {
+            result += queryToString(query.rules[i]);
+
+            if (i + 1 < length) {
+                result += ' ' + query.combinator + ' ';
+            }
+        }
+
+        result += ')';
+    }
+    else if (query.type === 'rule') {
+        result = query.field + ' ' + query.operator + ' ' + query.value;
+    }
+    else {
+        console.error('invalid type: type must be Group or Rule');
+        return '';
+    }
+
+    return result;
+}
+
 /**
  * QueryBuilderSemantic is QueryBuilder with react.semantic-ui components.
  * It outputs a structured JSON of rules which can be easily parsed to create SQL/NoSQL/whatever queries.
@@ -49,6 +81,15 @@ class QueryBuilderSemantic extends React.Component {
         }
 
     }
+
+    /**
+     * Iterates through the query to return a human format string query
+     * @param query
+     * @returns {string|*}
+     */
+    static getQueryString(query) {
+        return queryToString(query);
+    };
 
     /**
      * Checks the values passed as props to override the default values if specified

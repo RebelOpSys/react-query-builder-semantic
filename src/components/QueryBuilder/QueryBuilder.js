@@ -8,6 +8,40 @@ import ValueSelector from '../ValueSelector';
 import ValueEditor from '../ValueEditor';
 import _ from 'lodash';
 
+
+function queryToString(query) {
+    if (!query) {
+        return '';
+    }
+
+    let i, length;
+    let result;
+
+    if (query.type === 'group') {
+        result = '(';
+
+        for (i = 0, length = query.rules.length; i < length; ++i) {
+            result += queryToString(query.rules[i]);
+
+            if (i + 1 < length) {
+                result += ' ' + query.combinator + ' ';
+            }
+        }
+
+        result += ')';
+    }
+    else if (query.type === 'rule') {
+        result = query.field + ' ' + query.operator + ' ' + query.value;
+    }
+    else {
+        console.error('invalid type: type must be Group or Rule');
+        return '';
+    }
+
+    return result;
+}
+
+
 /**
  * QueryBuilder is an UI component to create queries and filters.
  * It outputs a structured JSON of rules which can be easily parsed to create SQL/NoSQL/whatever queries.
@@ -45,8 +79,16 @@ class QueryBuilder extends React.Component {
             schema.fields = nextProps.fields;
             this.setState({ schema });
         }
-
     }
+
+    /**
+     * Iterates through the query to return a human format string query
+     * @param query
+     * @returns {string|*}
+     */
+    static getQueryString(query) {
+        return queryToString(query);
+    };
 
     /**
      * Checks the values passed as props to override the default values if specified
@@ -450,6 +492,25 @@ QueryBuilder.defaultProps = {
             operators: 'rule--operator',
             value: 'rule--value',
         }
+    },
+    controlClassNames: {
+        queryBuilder: 'query-builder',
+        removeRule: 'group-or-rule__rule-remove',
+        ruleGroup: 'group-or-rule-container__group-or-rule group-or-rule__group',
+        ruleGroupHeader: 'group-or-rule__group-header',
+        ruleGroupContainer: 'query-builder__group-or-rule-container group-or-rule-container__group',
+        ruleGroupCombinators: 'group-or-rule__group-combinators',
+        combinators: 'group-or-rule__group-combinator',
+        ruleGroupActions: 'group-or-rule__group-actions',
+        addRule: 'group-or-rule__ruleGroup-addRule',
+        addGroup: 'group-or-rule__ruleGroup-addGroup',
+        removeGroup: 'group-or-rule__ruleGroup-removeGroup',
+        rule: 'group-or-rule-container__group-or-rule group-or-rule__rule',
+        ruleHeader: 'group-or-rule__rule-header',
+        ruleContainer: 'query-builder__group-or-rule-container group-or-rule-container__rule',
+        fields: 'group-or-rule__rule-field',
+        operators: 'group-or-rule__rule-operator',
+        value: 'group-or-rule__rule-value',
     }
 };
 

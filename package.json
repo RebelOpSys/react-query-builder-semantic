@@ -1,6 +1,6 @@
 {
   "name": "react-query-builder-semantic",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "main": "./lib/index.js",
   "readme": "README.md",
   "repository": {

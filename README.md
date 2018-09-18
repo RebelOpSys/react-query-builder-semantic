@@ -301,43 +301,43 @@ with the following properties:
     */
    queryBuilder: PropTypes.string,
    /**
-    *<div> containing the RuleGroup
+    *<Segment.Group> containing the RuleGroup
     */
    ruleGroup: PropTypes.string,
    /**
-    *<select> control for combinators
+    *<Dropdown> control for combinators
     */
    combinators: PropTypes.string,
    /**
-    *<button> to add a Rule
+    *<Button> to add a Rule
     */
    addRule: PropTypes.string,
    /**
-    *<button> to add a RuleGroup
+    *<Button> to add a RuleGroup
     */
    addGroup: PropTypes.string,
    /**
-    *<button> to remove a RuleGroup
+    *<Button> to remove a RuleGroup
     */
    removeGroup: PropTypes.string,
    /**
-    *<div> containing the Rule
+    *<Segment> containing the Rule
     */
    rule: PropTypes.string,
    /**
-    *<select> control for fields
+    *<Dropdown> control for fields
     */
    fields: PropTypes.string,
    /**
-    *<select> control for operators
+    *<Dropdown> control for operators
     */
    operators: PropTypes.string,
    /**
-    *<input> for the field value
+    *<Input> for the field value
     */
    value: PropTypes.string,
    /**
-    *<button> to remove a Rule
+    *<Button> to remove a Rule
     */
    removeRule: PropTypes.string,
 }
