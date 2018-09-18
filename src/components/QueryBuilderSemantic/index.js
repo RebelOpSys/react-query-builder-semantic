@@ -1,2 +1,2 @@
-import './query-builder.css'
+import './query-builder-semantic.css'
 export {default} from './QueryBuilderSemantic'
