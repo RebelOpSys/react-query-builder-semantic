@@ -42,6 +42,7 @@ export default class ExampleCustomValueEditor extends React.Component {
                 if (this.props.field !== 'isDev' ) {
                     return <input type="text"
                                   value={this.props.value}
+                                  className={'group-or-rule__rule-value'}
                                   onChange={e => this.props.handleOnChange(e.target.value)} />
                 }
 
@@ -49,6 +50,7 @@ export default class ExampleCustomValueEditor extends React.Component {
                     <span>
                         <input type="checkbox"
                                value={!!this.props.value}
+                               className={'group-or-rule__rule-value'}
                                onChange={e => this.props.handleOnChange(e.target.checked)} />
                     </span>
                 );
@@ -67,7 +69,6 @@ export default class ExampleCustomValueEditor extends React.Component {
                     <QueryBuilder fields={fields}
                                   query={this.state.query}
                                   controlElements={controlElements}
-                                  controlClassnames={{ fields: 'form-control' }}
                                   onQueryChange={this.logQuery} />
                 </div>
                 <div className="shrink query-log scroll">

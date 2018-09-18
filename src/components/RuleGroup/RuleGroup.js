@@ -66,7 +66,7 @@ class RuleGroup extends React.Component {
                             }
                         </div>
                     </div>
-                    <div className="group--children">
+                    <div className="group-or-rule__group-children">
                         {
                             rules.map(rule => {
                                 return (

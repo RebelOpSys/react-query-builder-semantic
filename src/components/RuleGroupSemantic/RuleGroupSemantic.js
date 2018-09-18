@@ -36,7 +36,7 @@ class RuleGroupSemantic extends React.Component {
         return (
             <div className={`${classNames.ruleGroupContainer}`}>
                 <Segment.Group {...ruleGroupSemanticProps.segment} className={`${classNames.ruleGroup}`}>
-                    <div className={'group--header'}>
+                    <div className={classNames.ruleGroupHeader}>
                         <Dropdown
                             {...ruleGroupSemanticProps.dropDown}
                             onChange={this.onCombinatorChange}
@@ -65,7 +65,7 @@ class RuleGroupSemantic extends React.Component {
                                 /> : null
                         }
                     </div>
-                    <div className="group--children">
+                    <div className="group-or-rule__group-children">
                         {
                             rules.map(rule => {
                                 return (

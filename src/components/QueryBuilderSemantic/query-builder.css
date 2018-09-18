@@ -18,64 +18,55 @@
     display: block;
     padding: 1rem;
 }
-.group-or-rule {
+.group-or-rule-container__group-or-rule {
     border-radius: 5px;
     position: relative;
 }
-.group-or-rule-container {
-    /*margin-bottom: 10px;*/
-    /*padding-right: 10px;*/
-}
+
 /******************************************************************************/
 /** RULE **********************************************************************/
 /******************************************************************************/
-.rule--header {
+.group-or-rule__rule-header {
     float: right;
-}
-.operator--options--sep {
-    margin-right: 10px;
 }
 div.tooltip-inner {
     max-width: 500px;
 }
-.rule--header:after {
+.group-or-rule__rule-header:after {
     content: "";
     display: table;
     clear: both;
 }
-.group--header {
+.group-or-rule__group-header {
     display: flex;
     align-items: center;
 }
 
-.rule {
+.group-or-rule__rule {
     background-color: white;
     border: 1px solid lightgrey;
     padding: 10px;
 }
-.qb-placeholder {
-    border: 1px dashed gray;
-}
 /******************************************************************************/
 /** GROUP *********************************************************************/
 /******************************************************************************/
-.group {
+.group-or-rule__group {
     background-color: white;
     border: 1px solid darkgray;
 }
 
-.group--children {
+.group-or-rule__group-children {
     padding-left: 20px;
 }
-.group--children > .group-or-rule-container > .group-or-rule:before {
+.group-or-rule__group-children > .query-builder__group-or-rule-container > .group-or-rule-container__group-or-rule:before {
     top: -4px;
     border-width: 0 0 2px 2px;
 }
-.group--children > .group-or-rule-container > .group-or-rule::after {
+.group-or-rule__group-children > .query-builder__group-or-rule-container > .group-or-rule-container__group-or-rule::after {
     top: 50%;
     border-width: 0 0 0 2px;
 }
-.group--children > .group-or-rule-container > .group-or-rule::before, .group--children > .group-or-rule-container > .group-or-rule::after {
+.group-or-rule__group-children > .query-builder__group-or-rule-container > .group-or-rule-container__group-or-rule::before, .group-or-rule__group-children > .query-builder__group-or-rule-container > .group-or-rule-container__group-or-rule::after {
     content: '';
     position: absolute;
     left: -14px;
@@ -87,32 +78,22 @@ div.tooltip-inner {
     -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
-.group--children > .group-or-rule-container:first-child > .group-or-rule::before {
+.group-or-rule__group-children > .query-builder__group-or-rule-container:first-child > .group-or-rule-container__group-or-rule::before {
     top: -12px;
     height: calc(50% + 14px);
 }
-.group--children > .group-or-rule-container:last-child > .group-or-rule::before {
+.group-or-rule__group-children > .query-builder__group-or-rule-container:last-child > .group-or-rule-container__group-or-rule::before {
     border-radius: 0 0 0 4px;
 }
-.group--children > .group-or-rule-container:last-child > .group-or-rule::after {
+.group-or-rule__group-children > .query-builder__group-or-rule-container:last-child > .group-or-rule-container__group-or-rule::after {
     display: none;
 }
-.group--children.hide--line > .group-or-rule-container > .group-or-rule::before, .group--children.hide--line > .group-or-rule-container > .group-or-rule::after {
+.group-or-rule__group-children.hide--line > .query-builder__group-or-rule-container > .group-or-rule-container__group-or-rule::before, .group-or-rule__group-children.hide--line > .query-builder__group-or-rule-container > .group-or-rule-container__group-or-rule::after {
     border-color: #14DCAF;
 }
-.group--header {
+.group-or-rule__group-header {
     padding-top: 10px;
     padding-right: 5px;
     padding-bottom: 10px;
     padding-left: 7px;
-}
-.group--actions {
-    flex: 1;
-    display: flex;
-}
-/******************************************************************************/
-/** COMBINATOR ***************************************************************/
-/******************************************************************************/
-.group--combinators{
-    margin-left: -2px;
 }
