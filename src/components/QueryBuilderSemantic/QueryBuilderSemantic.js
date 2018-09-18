@@ -3,7 +3,8 @@ import cloneDeep from 'lodash/cloneDeep';
 import React from 'react';
 import PropTypes from 'prop-types';
 import RuleGroup from '../RuleGroupSemantic';
-import ValueSelector from '../ValueSelectorSemantic';
+import OperatorSelector from '../OperatorSelectorSemantic';
+import FieldSelector from '../FieldSelectorSemantic';
 import ValueEditor from '../ValueEditorSemantic';
 import { Label, Segment } from 'semantic-ui-react';
 import _ from 'lodash';
@@ -65,18 +66,13 @@ class QueryBuilderSemantic extends React.Component {
     }
 
     componentWillMount() {
-        const { fields, operators, combinators, controlElements, controlClassNames, groupButtonSize, ruleGroupSegmentSize, ruleSegmentSize, ruleButtonSize, inputSize } = this.props;
+        const { fields, operators, combinators, controlElements, controlClassNames } = this.props;
         const classNames = this.mergeProperties(QueryBuilderSemantic.defaultControlClassNames, controlClassNames);
         const controls = this.mergeProperties(QueryBuilderSemantic.defaultControlElements, controlElements);
         this.setState({
             root: this.getInitialQuery(),
             schema: {
                 fields,
-                ruleGroupSegmentSize,
-                ruleSegmentSize,
-                groupButtonSize,
-                ruleButtonSize,
-                inputSize,
                 operators,
                 combinators,
                 classNames,
@@ -96,11 +92,12 @@ class QueryBuilderSemantic extends React.Component {
 
     render() {
         const { root: { id, rules, combinator }, schema } = this.state;
-        const { translations, combinatorColors } = this.props;
-
+        const { translations, combinatorColors, ruleSemanticProps, ruleGroupSemanticProps, } = this.props;
         return (
             <Segment.Group fluid raised className={`${schema.classNames.queryBuilder}`}>
                 <RuleGroup
+                    ruleSemanticProps={ruleSemanticProps}
+                    ruleGroupSemanticProps={ruleGroupSemanticProps}
                     translations={translations}
                     combinatorColors={combinatorColors}
                     rules={rules}
@@ -129,7 +126,7 @@ class QueryBuilderSemantic extends React.Component {
      * @returns {boolean}
      */
     isRuleGroup(rule) {
-        return !!(rule.combinator && rule.rules);
+        return rule.type === 'group';
     }
 
     createRule() {
@@ -138,6 +135,7 @@ class QueryBuilderSemantic extends React.Component {
         return {
             id: `r-${shortid.generate()}`,
             field: fields[0].value,
+            type:'rule',
             value: '',
             operator: operators[0].value
         };
@@ -146,6 +144,7 @@ class QueryBuilderSemantic extends React.Component {
     createRuleGroup() {
         return {
             id: `g-${shortid.generate()}`,
+            type:'group',
             rules: [],
             combinator: this.props.combinators[0].value,
         };
@@ -294,23 +293,18 @@ class QueryBuilderSemantic extends React.Component {
                 title: "Value",
             },
             removeRule: {
-                icon: "remove",
                 title: "Remove rule",
             },
             removeGroup: {
-                icon: "minus",
                 title: "Remove group",
             },
             addRule: {
-                icon: "plus",
                 title: "Add rule",
             },
             addGroup: {
-                icon: "plus",
                 title: "Add group",
             },
             combinators: {
-                icon: 'filter',
                 title: "Combinators",
             }
         }
@@ -357,8 +351,8 @@ class QueryBuilderSemantic extends React.Component {
 
     static get defaultControlElements() {
         return {
-            fieldSelector: ValueSelector,
-            operatorSelector: ValueSelector,
+            fieldSelector: FieldSelector,
+            operatorSelector: OperatorSelector,
             valueEditor: ValueEditor
         };
     }
@@ -409,38 +403,88 @@ QueryBuilderSemantic.defaultProps = {
             title: "Value",
         },
         removeRule: {
-            icon: "remove",
             title: "Remove rule",
         },
         removeGroup: {
-            icon: "minus",
             title: "Remove group",
         },
         addRule: {
-            icon: "plus",
             title: "Add rule",
         },
         addGroup: {
-            icon: "plus",
             title: "Add group",
         },
         combinators: {
-            icon: 'filter',
             title: "Combinators",
         }
     },
     controlElements: {
-        fieldSelector: ValueSelector,
-        operatorSelector: ValueSelector,
+        fieldSelector: FieldSelector,
+        operatorSelector: OperatorSelector,
         valueEditor: ValueEditor
     },
     getOperators: null,
     onQueryChange: null,
-    ruleButtonSize: 'tiny',
-    groupButtonSize: 'tiny',
-    ruleInputSize: 'tiny',
-    ruleSegmentSize: 'tiny',
-    ruleGroupSegmentSize: 'tiny',
+    ruleSemanticProps: {
+        segment: {
+            size: 'tiny',
+            padded: true,
+            compact: true,
+        },
+        valueEditor: {
+            size: 'tiny',
+            type: "text"
+        },
+        fieldSelector: {
+            scrolling: true,
+            selection: true,
+            search: true,
+        },
+        operatorSelector: {
+            scrolling: true,
+            selection: true,
+            search: true,
+        },
+        deleteRuleButton: {
+            size: 'tiny',
+            compact: true,
+            circular: true,
+            floated: 'right',
+            icon: 'remove'
+        }
+    },
+    ruleGroupSemanticProps: {
+        dropDown: {
+            button: true,
+            attached: 'left',
+            className: 'icon',
+            size: 'tiny',
+            labeled: true,
+            scrolling: true,
+            icon: 'filter'
+        },
+        segment: {
+            size: 'tiny',
+        },
+        addGroupButton: {
+            attached: true,
+            size: 'tiny',
+            compact: true,
+            icon: 'plus'
+        },
+        removeGroupButton: {
+            attached: 'right',
+            size: 'tiny',
+            compact: true,
+            icon: 'minus'
+        },
+        addRuleButton: {
+            attached: 'right',
+            size: 'tiny',
+            compact: true,
+            icon: 'plus'
+        },
+    },
     controlClassNames: {
         queryBuilder: 'query-builder',
         ruleGroup: 'group group-or-rule',
@@ -459,39 +503,72 @@ QueryBuilderSemantic.defaultProps = {
 
 QueryBuilderSemantic.propTypes = {
     /**
-     * Size for semantic buttons on rule
-     * https://react.semantic-ui.com/elements/button/#variations-size
+     * Semantic Props for valueEditor,fieldSelector,valueSelector,segment,deleteRuleButton on a rule
      */
-    ruleButtonSize: PropTypes.string,
+    ruleSemanticProps: PropTypes.shape({
+        /**
+         * Semantic Input props on a rule
+         * https://react.semantic-ui.com/elements/input/
+         */
+        valueEditor: PropTypes.any,
+        /**
+         * Semantic Dropdown props on a rule
+         * https://react.semantic-ui.com/modules/dropdown/
+         */
+        fieldSelector: PropTypes.any,
+        /**
+         * Semantic Dropdown props on a rule
+         * https://react.semantic-ui.com/modules/dropdown/
+         */
+        operatorSelector: PropTypes.any,
+        /**
+         * Semantic Segment props on a rule
+         * https://react.semantic-ui.com/elements/segment/
+         */
+        segment: PropTypes.any,
+        /**
+         * Semantic delete Button props on a rule
+         * https://react.semantic-ui.com/elements/button/
+         */
+        deleteRuleButton: PropTypes.any,
+    }),
     /**
-     * Size for semantic segment on rule
-     * https://react.semantic-ui.com/elements/segment/#variations-sizes
+     * Semantic Props for dropDown,addGroupButton,removeGroupButton,segment,addRuleButton on a group
      */
-    ruleSegmentSize: PropTypes.string,
-    /**
-     * Size for semantic buttons on group
-     * https://react.semantic-ui.com/elements/button/#variations-size
-     */
-    groupButtonSize: PropTypes.string,
-    /**
-     * Size for semantic segment on group
-     * https://react.semantic-ui.com/elements/segment/#variations-sizes
-     */
-    ruleGroupSegmentSize: PropTypes.string,
-    /**
-     * Size for inputs on rule
-     * https://react.semantic-ui.com/elements/input/#variations-size
-     */
-    inputSize: PropTypes.string,
+    ruleGroupSemanticProps: PropTypes.shape({
+        /**
+         * Semantic combinator Dropdown props on a group
+         * https://react.semantic-ui.com/modules/dropdown/
+         */
+        dropDown: PropTypes.any,
+        /**
+         * Semantic Segment props on a group
+         * https://react.semantic-ui.com/elements/segment/
+         */
+        segment: PropTypes.any,
+        /**
+         * Semantic add group Button props on a group
+         * https://react.semantic-ui.com/elements/button/
+         */
+        addGroupButton: PropTypes.any,
+        /**
+         * Semantic remove group Button props on a group
+         * https://react.semantic-ui.com/elements/button/
+         */
+        removeGroupButton: PropTypes.any,
+        /**
+         * Semantic remove group Button props on a group
+         * https://react.semantic-ui.com/elements/button/
+         */
+        addRuleButton: PropTypes.any,
+    }),
     query: PropTypes.object,
     /**
      *  The array of fields that should be used. Each field should be an object with
-     The Id is optional, if you do not provide an id for a field then the value will be used
      */
     fields: PropTypes.arrayOf(PropTypes.shape({
         value: PropTypes.string.isRequired,
         text: PropTypes.string.isRequired,
-        id: PropTypes.string
     })).isRequired,
     /**
      The array of operators that should be used.
@@ -505,7 +582,7 @@ QueryBuilderSemantic.propTypes = {
      */
     combinators: PropTypes.arrayOf(PropTypes.shape({
         value: PropTypes.string.isRequired,
-        content:PropTypes.any,
+        content: PropTypes.any,
         text: PropTypes.string.isRequired,
     })),
     /**
@@ -545,19 +622,19 @@ QueryBuilderSemantic.propTypes = {
          */
         ruleGroup: PropTypes.string,
         /**
-         *<select> control for combinators
+         *<Dropdown> control for combinators
          */
         combinators: PropTypes.string,
         /**
-         *<button> to add a Rule
+         *<Button> to add a Rule
          */
         addRule: PropTypes.string,
         /**
-         *<button> to add a RuleGroup
+         *<Button> to add a RuleGroup
          */
         addGroup: PropTypes.string,
         /**
-         *<button> to remove a RuleGroup
+         *<Button> to remove a RuleGroup
          */
         removeGroup: PropTypes.string,
         /**
@@ -565,26 +642,24 @@ QueryBuilderSemantic.propTypes = {
          */
         rule: PropTypes.string,
         /**
-         *<select> control for fields
+         *<Dropdown> control for fields
          */
         fields: PropTypes.string,
         /**
-         *<select> control for operators
+         *<Dropdown> control for operators
          */
         operators: PropTypes.string,
         /**
-         *<input> for the field value
+         *<Input> for the field value
          */
         value: PropTypes.string,
         /**
-         *<button> to remove a Rule
+         *<Button> to remove a Rule
          */
         removeRule: PropTypes.string,
     }),
     /**
-     * This can be used to override translatable texts and
-     * icons applied to various controls that are created by the <QueryBuilderSemantic />
-     * https://react.semantic-ui.com/elements/icon/
+     * This can be used to override translatable texts that are created by the <QueryBuilderSemantic />
      */
     translations: PropTypes.shape({
         fields: PropTypes.shape({
@@ -597,19 +672,15 @@ QueryBuilderSemantic.propTypes = {
             title: PropTypes.string
         }),
         removeRule: PropTypes.shape({
-            icon: PropTypes.string,
             title: PropTypes.string
         }),
         removeGroup: PropTypes.shape({
-            icon: PropTypes.string,
             title: PropTypes.string
         }),
         addRule: PropTypes.shape({
-            icon: PropTypes.string,
             title: PropTypes.string
         }),
         addGroup: PropTypes.shape({
-            icon: PropTypes.string,
             title: PropTypes.string
         }),
         combinators: PropTypes.shape({

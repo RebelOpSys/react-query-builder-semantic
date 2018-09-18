@@ -1,10 +1,10 @@
 import React from 'react';
-import Rule from '../RuleSemantic';
+import RuleSemantic from '../RuleSemantic';
 import PropTypes from 'prop-types';
 import { Button, Dropdown, Segment } from 'semantic-ui-react';
 
 /**
- * Default element to group rules for the QueryBuilder
+ * Default element to group rules for the QueryBuilderSemantic
  */
 class RuleGroupSemantic extends React.Component {
     constructor(props) {
@@ -30,51 +30,36 @@ class RuleGroupSemantic extends React.Component {
     render() {
         const {
             combinator, rules, translations, onRuleRemove, createRule, onRuleAdd, createRuleGroup, onGroupAdd, onGroupRemove,
-            isRuleGroup, getLevel, getOperators, onPropChange,
-            schema: { combinators, classNames, groupButtonSize, ruleGroupSegmentSize }
+            isRuleGroup, getLevel, getOperators, onPropChange,ruleSemanticProps, ruleGroupSemanticProps,
+            schema: { combinators, classNames }
         } = this.props;
         return (
             <div className={`${classNames.ruleGroupContainer}`}>
-                <Segment.Group size={ruleGroupSegmentSize}  className={`${classNames.ruleGroup}`}>
+                <Segment.Group {...ruleGroupSemanticProps.segment} className={`${classNames.ruleGroup}`}>
                     <div className={'group--header'}>
                         <Dropdown
-                            button
-                            attached={'left'}
-                            className={'icon'}
-                            size={groupButtonSize}
-                            labeled
-                            scrolling
+                            {...ruleGroupSemanticProps.dropDown}
                             onChange={this.onCombinatorChange}
-                            icon={translations.combinators.icon}
                             options={combinators}
                             defaultValue={combinator}
                         />
                         <Button
-                            attached={'right'}
-                            size={groupButtonSize}
-                            compact
+                            {...ruleGroupSemanticProps.addRuleButton}
                             className={classNames.addRule}
-                            icon={translations.addRule.icon}
                             content={translations.addRule.title}
                             onClick={this.addRule}
                         />
                         <Button
-                            attached
-                            size={groupButtonSize}
-                            compact
+                            {...ruleGroupSemanticProps.addGroupButton}
                             className={classNames.addGroup}
-                            icon={translations.addGroup.icon}
                             content={translations.addGroup.title}
                             onClick={this.addGroup}
                         />
                         {
                             this.hasParentGroup() ?
                                 <Button
-                                    attached={'right'}
-                                    compact
-                                    size={groupButtonSize}
+                                    {...ruleGroupSemanticProps.removeGroupButton}
                                     className={classNames.removeGroup}
-                                    icon={translations.removeGroup.icon}
                                     content={translations.removeGroup.title}
                                     onClick={this.removeGroup}
                                 /> : null
@@ -87,6 +72,8 @@ class RuleGroupSemantic extends React.Component {
                                     isRuleGroup(rule)
                                         ? <RuleGroupSemantic key={rule.id}
                                                              id={rule.id}
+                                                             ruleGroupSemanticProps={ruleGroupSemanticProps}
+                                                             ruleSemanticProps={ruleSemanticProps}
                                                              schema={this.props.schema}
                                                              parentId={this.props.id}
                                                              onGroupAdd={onGroupAdd}
@@ -103,20 +90,23 @@ class RuleGroupSemantic extends React.Component {
                                                              combinatorColors={this.props.combinatorColors}
                                                              translations={this.props.translations}
                                                              rules={rule.rules} />
-                                        : <Rule key={rule.id}
-                                                id={rule.id}
-                                                field={rule.field}
-                                                value={rule.value}
-                                                getOperators={getOperators}
-                                                onPropChange={onPropChange}
-                                                combinator={combinator}
-                                                combinatorColor={this.getColorForCombinator()}
-                                                getLevel={getLevel}
-                                                operator={rule.operator}
-                                                schema={this.props.schema}
-                                                parentId={this.props.id}
-                                                translations={this.props.translations}
-                                                onRuleRemove={onRuleRemove} />
+                                        : <RuleSemantic
+                                            key={rule.id}
+                                            id={rule.id}
+                                            ruleSemanticProps={ruleSemanticProps}
+                                            field={rule.field}
+                                            value={rule.value}
+                                            getOperators={getOperators}
+                                            onPropChange={onPropChange}
+                                            combinator={combinator}
+                                            combinatorColor={this.getColorForCombinator()}
+                                            getLevel={getLevel}
+                                            operator={rule.operator}
+                                            schema={this.props.schema}
+                                            parentId={this.props.id}
+                                            translations={this.props.translations}
+                                            onRuleRemove={onRuleRemove}
+                                        />
                                 );
                             })
                         }
@@ -165,6 +155,66 @@ class RuleGroupSemantic extends React.Component {
 }
 
 RuleGroupSemantic.propTypes = {
+    /**
+     * Semantic Props for valueEditor,fieldSelector,valueSelector,segment,deleteRuleButton on a rule
+     */
+    ruleSemanticProps: PropTypes.shape({
+        /**
+         * Semantic Input props on a rule
+         * https://react.semantic-ui.com/elements/input/
+         */
+        valueEditor: PropTypes.any,
+        /**
+         * Semantic Dropdown props on a rule
+         * https://react.semantic-ui.com/modules/dropdown/
+         */
+        fieldSelector: PropTypes.any,
+        /**
+         * Semantic Dropdown props on a rule
+         * https://react.semantic-ui.com/modules/dropdown/
+         */
+        valueSelector: PropTypes.any,
+        /**
+         * Semantic Segment props on a rule
+         * https://react.semantic-ui.com/elements/segment/
+         */
+        segment: PropTypes.any,
+        /**
+         * Semantic delete Button props on a rule
+         * https://react.semantic-ui.com/elements/button/
+         */
+        deleteRuleButton: PropTypes.any,
+    }),
+    /**
+     * Semantic Props for dropDown,addGroupButton,removeGroupButton,segment,addRuleButton on a group
+     */
+    ruleGroupSemanticProps: PropTypes.shape({
+        /**
+         * Semantic combinator Dropdown props on a group
+         * https://react.semantic-ui.com/modules/dropdown/
+         */
+        dropDown: PropTypes.any,
+        /**
+         * Semantic Segment props on a group
+         * https://react.semantic-ui.com/elements/segment/
+         */
+        segment: PropTypes.any,
+        /**
+         * Semantic add group Button props on a group
+         * https://react.semantic-ui.com/elements/button/
+         */
+        addGroupButton: PropTypes.any,
+        /**
+         * Semantic remove group Button props on a group
+         * https://react.semantic-ui.com/elements/button/
+         */
+        removeGroupButton: PropTypes.any,
+        /**
+         * Semantic remove group Button props on a group
+         * https://react.semantic-ui.com/elements/button/
+         */
+        addRuleButton: PropTypes.any,
+    }),
     /**
      * This is a callback function invoked to get the list of allowed operators for the given field
      */

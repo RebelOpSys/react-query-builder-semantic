@@ -3,16 +3,14 @@ import PropTypes from 'prop-types';
 import { Dropdown } from 'semantic-ui-react';
 
 /**
- * Default Semantic element to select a value for a Rule in the QueryBuilder
+ * Default Semantic element to select a field for a Rule in the QueryBuilderSemantic
  */
-const ValueSelectorSemantic = (props) => {
-    const { value, options, className, handleOnChange, title } = props;
+const FieldSelectorSemantic = (props) => {
+    const { value, options, className, handleOnChange, title,ruleSemanticProps } = props;
 
     return (
         <Dropdown
-            scrolling
-            selection
-            search
+            {...ruleSemanticProps.fieldSelector}
             title={title}
             className={className}
             options={options}
@@ -22,11 +20,21 @@ const ValueSelectorSemantic = (props) => {
     );
 };
 
-ValueSelectorSemantic.displayName = 'ValueSelectorSemantic';
+FieldSelectorSemantic.displayName = 'FieldSelectorSemantic';
 
-ValueSelectorSemantic.propTypes = {
+FieldSelectorSemantic.propTypes = {
     /**
-     * selected value for element
+     * Semantic Props for fieldSelector on a rule
+     */
+    ruleSemanticProps: PropTypes.shape({
+        /**
+         * Semantic Dropdown props on a rule
+         * https://react.semantic-ui.com/modules/dropdown/
+         */
+        fieldSelector: PropTypes.any,
+    }),
+    /**
+     * selected field from the existing query representation, if any
      */
     value: PropTypes.string,
     /**
@@ -51,4 +59,4 @@ ValueSelectorSemantic.propTypes = {
     title: PropTypes.string,
 };
 
-export default ValueSelectorSemantic;
+export default FieldSelectorSemantic;

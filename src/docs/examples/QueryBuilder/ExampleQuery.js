@@ -20,19 +20,23 @@ export default class ExampleQuery extends React.Component {
         this.state = {
             query: {
                 "id": "g-9eb72517-13ec-4a49-93f5-64fd84389811",
+                "type": "group",
                 "rules": [
                     {
                         "id": "r-8bab2387-30c0-4c0f-a7ae-2ccc17873f92",
                         "field": "firstName",
+                        "type": "rule",
                         "value": "jacques",
                         "operator": "="
                     },
                     {
                         "id": "g-821bc7e0-19a8-497b-925f-2793d92d67b6",
+                        "type": "group",
                         "rules": [
                             {
                                 "id": "r-97e2e20e-7d6d-40f3-b610-877325177928",
                                 "field": "lastName",
+                                "type": "rule",
                                 "value": "nel",
                                 "operator": "="
                             }

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Button, Segment } from 'semantic-ui-react';
 
 /**
- * Default element to represent a rule for a RuleGroup in the QueryBuilder
+ * Default element to represent a rule for a RuleGroup in the QueryBuilderSemantic
  */
 class RuleSemantic extends React.Component {
 
@@ -14,12 +14,12 @@ class RuleSemantic extends React.Component {
 
     render() {
         const {
-            field, operator,combinatorColor, value, translations, getOperators, schema:
-                { fields, controls, classNames, ruleButtonSize, ruleSegmentSize, inputSize }
+            field, operator,combinatorColor,ruleSemanticProps, value, translations, getOperators, schema:
+                { fields, controls, classNames }
         } = this.props;
         return (
             <div className={`${classNames.ruleContainer}`}>
-                <Segment size={ruleSegmentSize} compact padded className={`${classNames.rule}`}
+                <Segment {...ruleSemanticProps.segment} className={`${classNames.rule}`}
                          color={combinatorColor}>
                     {
                         React.createElement(controls.fieldSelector,
@@ -27,6 +27,7 @@ class RuleSemantic extends React.Component {
                                 options: fields,
                                 title: translations.fields.title,
                                 value: field,
+                                ruleSemanticProps,
                                 className: `${classNames.fields}`,
                                 handleOnChange: this.onFieldChanged,
                             }
@@ -38,6 +39,7 @@ class RuleSemantic extends React.Component {
                                 field: field,
                                 title: translations.operators.title,
                                 options: getOperators(field),
+                                ruleSemanticProps,
                                 value: operator,
                                 className: `${classNames.operators}`,
                                 handleOnChange: this.onOperatorChanged,
@@ -49,7 +51,7 @@ class RuleSemantic extends React.Component {
                             field: field,
                             title: translations.value.title,
                             operator: operator,
-                            size: inputSize,
+                            ruleSemanticProps,
                             value: value,
                             className: `${classNames.value}`,
                             handleOnChange: this.onValueChanged,
@@ -57,11 +59,7 @@ class RuleSemantic extends React.Component {
                     )
                     }
                     <Button
-                        compact
-                        circular
-                        floated={'right'}
-                        size={ruleButtonSize}
-                        icon={translations.removeRule.icon}
+                        {...ruleSemanticProps.deleteRuleButton}
                         onClick={this.removeRule}
                     />
                 </Segment>
@@ -96,6 +94,36 @@ class RuleSemantic extends React.Component {
 }
 
 RuleSemantic.propTypes = {
+    /**
+     * Semantic Props for valueEditor,fieldSelector,valueSelector,segment,deleteRuleButton on a rule
+     */
+    ruleSemanticProps: PropTypes.shape({
+        /**
+         * Semantic Input props on a rule
+         * https://react.semantic-ui.com/elements/input/
+         */
+        valueEditor: PropTypes.any,
+        /**
+         * Semantic Dropdown props on a rule
+         * https://react.semantic-ui.com/modules/dropdown/
+         */
+        fieldSelector: PropTypes.any,
+        /**
+         * Semantic Dropdown props on a rule
+         * https://react.semantic-ui.com/modules/dropdown/
+         */
+        operatorSelector: PropTypes.any,
+        /**
+         * Semantic Segment props on a rule
+         * https://react.semantic-ui.com/elements/segment/
+         */
+        segment: PropTypes.any,
+        /**
+         * Semantic delete Button props on a rule
+         * https://react.semantic-ui.com/elements/button/
+         */
+        deleteRuleButton: PropTypes.any,
+    }),
     /**
      * color for rule segment selected based on combinatorColors array for selected combinator
      */

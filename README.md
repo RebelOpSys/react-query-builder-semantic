@@ -40,30 +40,77 @@ import QueryBuilderSemantic from 'react-query-builder-semantic/lib/QueryBuilderS
 
 `<QueryBuilderSemantic />` is the only top-level component exposed from this library. It supports the following properties:
 
-#### ruleButtonSize *(Required)*
-[Size](https://react.semantic-ui.com/elements/button/#variations-size) for semantic buttons on a rule
+#### ruleSemanticProps *(Required)*
+Semantic Props for valueEditor, fieldSelector, valueSelector, segment, deleteRuleButton on a rule. Default is :
+```js
+ruleSemanticProps: {
+    segment: {
+        size: 'tiny',
+        padded: true,
+        compact: true,
+    },
+    valueEditor: {
+        size: 'tiny',
+        type: "text"
+    },
+    fieldSelector: {
+        scrolling: true,
+        selection: true,
+        search: true,
+    },
+    operatorSelector: {
+        scrolling: true,
+        selection: true,
+        search: true,
+    },
+    deleteRuleButton: {
+        size: 'tiny',
+        compact: true,
+        circular: true,
+        floated: 'right',
+        icon: 'remove'
+    }
+}
 
-Default is : 'tiny'
+```
 
-#### ruleSegmentSize *(Required)*
-[Size](https://react.semantic-ui.com/elements/segment/#variations-sizes) for semantic segment on a rule
+#### ruleGroupSemanticProps *(Required)*
+Semantic Props for dropDown, addGroupButton, removeGroupButton, segment, addRuleButton on a group. Default is :
+```js
+ruleGroupSemanticProps: {
+    dropDown: {
+        button: true,
+        attached: 'left',
+        className: 'icon',
+        size: 'tiny',
+        labeled: true,
+        scrolling: true,
+        icon: 'filter'
+    },
+    segment: {
+        size: 'tiny',
+    },
+    addGroupButton: {
+        attached: true,
+        size: 'tiny',
+        compact: true,
+        icon: 'plus'
+    },
+    removeGroupButton: {
+        attached: 'right',
+        size: 'tiny',
+        compact: true,
+        icon: 'minus'
+    },
+    addRuleButton: {
+        attached: 'right',
+        size: 'tiny',
+        compact: true,
+        icon: 'plus'
+    },
+}
 
-Default is : 'tiny'
-
-#### groupButtonSize *(Required)*
-[Size](https://react.semantic-ui.com/elements/button/#variations-size) for semantic buttons on a group
-
-Default is : 'tiny'
-
-#### ruleGroupSegmentSize *(Required)*
-[Size](https://react.semantic-ui.com/elements/segment/#variations-sizes) for semantic segment on a group
-
-Default is : 'tiny'
-
-#### inputSize *(Required)*
-[Size](https://react.semantic-ui.com/elements/input/#variations-size) for semantic inputs on a rule
-
-Default is : 'tiny'
+```
 
 #### fields *(Required)*
 [ {value:String, text:String} ]
@@ -136,34 +183,61 @@ React.PropTypes.shape({
 
 This is a custom controls object that allows you to override the control elements used.
 The following control overrides are supported:
-- `fieldSelector`: By default a `<Dropdown />` is used. The following props are passed:
+- `fieldSelector`: By default a `<Dropdown scrolling selection search />` is used. The following props are passed:
 
   ```js
   {
+    /**
+     * Semantic Props for fieldSelector on a rule
+     */
+    ruleSemanticProps: PropTypes.shape({
+        /**
+         * Semantic Dropdown props on a rule
+         * https://react.semantic-ui.com/modules/dropdown/
+         */
+        fieldSelector: PropTypes.any,
+    }),
     options: React.PropTypes.array.isRequired, //same as 'fields' passed into QueryBuilderSemantic
     value: React.PropTypes.string, //selected field from the existing query representation, if any
     className: React.PropTypes.string, //css classNames to be applied
     handleOnChange: React.PropTypes.func, //callback function to update query representation
-    level: React.PropTypes.number //The level the group this rule belongs to
   }
   ```
 - `operatorSelector`: By default a `<<Dropdown scrolling selection search />` is used. The following props are passed:
 
   ```js
   {
-    field: React.PropTypes.string, //field name corresponding to this Rule
-    options: React.PropTypes.array.isRequired, //return value of getOperators(field)
-    value: React.PropTypes.string, //selected operator from the existing query representation, if any
-    className: React.PropTypes.string, //css classNames to be applied
-    handleOnChange: React.PropTypes.func //callback function to update query representation
+    /**
+    * Semantic Props for valueSelector on a rule
+    */
+   ruleSemanticProps: PropTypes.shape({
+       /**
+        * Semantic Dropdown props on a rule
+        * https://react.semantic-ui.com/modules/dropdown/
+        */
+       operatorSelector: PropTypes.any,
+   }),
+   options: React.PropTypes.array.isRequired, //same as 'fields' passed into QueryBuilderSemantic
+   value: React.PropTypes.string, //selected operator from the existing query representation, if any
+   className: React.PropTypes.string, //css classNames to be applied
+   handleOnChange: React.PropTypes.func, //callback function to update query representation
   }
   ```
 - `valueEditor`: By default a `<Input type="text" />` is used. The following props are passed:
 
   ```js
   {
+    /**
+     * Semantic Props for valueEditor on a rule
+     */
+    ruleSemanticProps: PropTypes.shape({
+        /**
+         * Semantic Input props on a rule
+         * https://react.semantic-ui.com/elements/input/
+         */
+        valueEditor: PropTypes.any,
+    }),
     field: React.PropTypes.string, //field name corresponding to this Rule
-    size: PropTypes.string, //semantic size for field default is 'tiny'
     operator: React.PropTypes.string, //operator name corresponding to this Rule
     value: React.PropTypes.string, //value from the existing query representation, if any
     handleOnChange: React.PropTypes.func //callback function to update the query representation
@@ -184,22 +258,27 @@ query is provided as a JSON structure, as shown below:
 
 ```json
 {
+  "type": "group",
   "combinator": "and",
   "rules": [
     {
+      "type": "rule",
       "field": "firstName",
       "operator": "null",
       "value": ""
     },
     {
+      "type": "rule",
       "field": "lastName",
       "operator": "null",
       "value": ""
     },
     {
+      "type": "group",
       "combinator": "and",
       "rules": [
         {
+          "type": "rule",
           "field": "age",
           "operator": ">",
           "value": "30"
@@ -281,23 +360,18 @@ with the following properties:
         title: "Value",
     },
     removeRule: {
-        icon: "remove",
         title: "Remove rule",
     },
     removeGroup: {
-        icon: "minus",
         title: "Remove group",
     },
     addRule: {
-        icon: "plus",
         title: "Add rule",
     },
     addGroup: {
-        icon: "plus",
         title: "Add group",
     },
     combinators: {
-        icon: 'filter',
         title: "Combinators",
     }
 }
@@ -487,22 +561,27 @@ query is provided as a JSON structure, as shown below:
 
 ```json
 {
+  "type": "group",
   "combinator": "and",
   "rules": [
     {
+      "type": "rule",
       "field": "firstName",
       "operator": "null",
       "value": ""
     },
     {
+      "type": "rule",
       "field": "lastName",
       "operator": "null",
       "value": ""
     },
     {
+      "type": "group",
       "combinator": "and",
       "rules": [
         {
+          "type": "rule",
           "field": "age",
           "operator": ">",
           "value": "30"

@@ -122,7 +122,7 @@ class QueryBuilder extends React.Component {
      * @returns {boolean}
      */
     isRuleGroup(rule) {
-        return !!(rule.combinator && rule.rules);
+        return rule.type === 'group';
     }
 
     createRule() {
@@ -130,6 +130,7 @@ class QueryBuilder extends React.Component {
 
         return {
             id: `r-${shortid.generate()}`,
+            type:'rule',
             field: fields[0].name,
             value: '',
             operator: operators[0].name
@@ -139,6 +140,7 @@ class QueryBuilder extends React.Component {
     createRuleGroup() {
         return {
             id: `g-${shortid.generate()}`,
+            type:'group',
             rules: [],
             combinator: this.props.combinators[0].name,
         };

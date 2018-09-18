@@ -3,19 +3,19 @@ import PropTypes from 'prop-types';
 import { Input } from 'semantic-ui-react';
 
 /**
- * Default semantic element to input a value for a Rule in the QueryBuilder
+ * Default semantic element to input a value for a Rule in the QueryBuilderSemantic
  */
 const ValueEditorSemantic = (props) => {
-    const { operator, value, handleOnChange, title, className, size } = props;
+    const { operator, value, handleOnChange, title, className, ruleSemanticProps } = props;
 
     if (operator === 'null' || operator === 'notNull') {
         return null;
     }
 
     return (
-        <Input type="text"
+        <Input
+               {...ruleSemanticProps.valueEditor}
                error={!value}
-               size={size}
                className={className}
                value={value}
                title={title}
@@ -31,9 +31,15 @@ ValueEditorSemantic.propTypes = {
      */
     field: PropTypes.string,
     /**
-     * https://react.semantic-ui.com/elements/input/#variations-size
+     * Semantic Props for valueEditor on a rule
      */
-    size: PropTypes.string,
+    ruleSemanticProps: PropTypes.shape({
+        /**
+         * Semantic Input props on a rule
+         * https://react.semantic-ui.com/elements/input/
+         */
+        valueEditor: PropTypes.any,
+    }),
     /**
      * operator name corresponding to Rule using the element
      */
