@@ -30,8 +30,8 @@ class RuleGroupSemantic extends React.Component {
     render() {
         const {
             combinator, rules, translations, onRuleRemove, createRule, onRuleAdd, createRuleGroup, onGroupAdd, onGroupRemove,
-            isRuleGroup, getLevel, getOperators, onPropChange,ruleSemanticProps, ruleGroupSemanticProps,
-            schema: { combinators, classNames }
+            isRuleGroup, getLevel, getOperators, onPropChange, ruleSemanticProps, ruleGroupSemanticProps, classNames,
+            schema: { combinators }
         } = this.props;
         return (
             <div className={`${classNames.ruleGroupContainer}`}>
@@ -72,6 +72,7 @@ class RuleGroupSemantic extends React.Component {
                                     isRuleGroup(rule)
                                         ? <RuleGroupSemantic key={rule.id}
                                                              id={rule.id}
+                                                             classNames={classNames}
                                                              ruleGroupSemanticProps={ruleGroupSemanticProps}
                                                              ruleSemanticProps={ruleSemanticProps}
                                                              schema={this.props.schema}
@@ -93,6 +94,7 @@ class RuleGroupSemantic extends React.Component {
                                         : <RuleSemantic
                                             key={rule.id}
                                             id={rule.id}
+                                            classNames={classNames}
                                             ruleSemanticProps={ruleSemanticProps}
                                             field={rule.field}
                                             value={rule.value}
@@ -276,8 +278,7 @@ RuleGroupSemantic.propTypes = {
      */
     schema: PropTypes.object,
     /**
-     * This can be used to override translatable texts and
-     * icons applied to various controls that are created by the <QueryBuilderSemantic />
+     * This can be used to override translatable texts created by the <QueryBuilderSemantic />
      * https://react.semantic-ui.com/elements/icon/
      */
     translations: PropTypes.shape({
@@ -318,6 +319,55 @@ RuleGroupSemantic.propTypes = {
         color: PropTypes.string.isRequired,
         combinator: PropTypes.string.isRequired,
     })),
+    /**
+     * This can be used to assign specific CSS classes to various controls that are created by the QueryBuilderSemantic
+     */
+    classNames: PropTypes.shape({
+        /**
+         *Root <div> element
+         */
+        queryBuilder: PropTypes.string,
+        /**
+         *<div> containing the RuleGroup
+         */
+        ruleGroup: PropTypes.string,
+        /**
+         *<Dropdown> control for combinators
+         */
+        combinators: PropTypes.string,
+        /**
+         *<Button> to add a Rule
+         */
+        addRule: PropTypes.string,
+        /**
+         *<Button> to add a RuleGroup
+         */
+        addGroup: PropTypes.string,
+        /**
+         *<Button> to remove a RuleGroup
+         */
+        removeGroup: PropTypes.string,
+        /**
+         *<div> containing the Rule
+         */
+        rule: PropTypes.string,
+        /**
+         *<Dropdown> control for fields
+         */
+        fields: PropTypes.string,
+        /**
+         *<Dropdown> control for operators
+         */
+        operators: PropTypes.string,
+        /**
+         *<Input> for the field value
+         */
+        value: PropTypes.string,
+        /**
+         *<Button> to remove a Rule
+         */
+        removeRule: PropTypes.string,
+    }),
 };
 
 RuleGroupSemantic.defaultProps = {

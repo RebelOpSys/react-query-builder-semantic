@@ -14,8 +14,8 @@ class RuleSemantic extends React.Component {
 
     render() {
         const {
-            field, operator,combinatorColor,ruleSemanticProps, value, translations, getOperators, schema:
-                { fields, controls, classNames }
+            field, operator, combinatorColor, ruleSemanticProps, value, translations, getOperators, classNames,
+            schema: { fields, controls }
         } = this.props;
         return (
             <div className={`${classNames.ruleContainer}`}>
@@ -127,7 +127,7 @@ RuleSemantic.propTypes = {
     /**
      * color for rule segment selected based on combinatorColors array for selected combinator
      */
-    combinatorColor:PropTypes.string,
+    combinatorColor: PropTypes.string,
     /**
      * This is a callback function invoked to get the list of allowed operators for the given field
      */
@@ -167,7 +167,90 @@ RuleSemantic.propTypes = {
     /**
      * Current schema from QueryBuilder
      */
-    schema: PropTypes.object
+    schema: PropTypes.object,
+    /**
+     * This can be used to assign specific CSS classes to various controls that are created by the QueryBuilderSemantic
+     */
+    classNames: PropTypes.shape({
+        /**
+         *Root <div> element
+         */
+        queryBuilder: PropTypes.string,
+        /**
+         *<div> containing the RuleGroup
+         */
+        ruleGroup: PropTypes.string,
+        /**
+         *<Dropdown> control for combinators
+         */
+        combinators: PropTypes.string,
+        /**
+         *<Button> to add a Rule
+         */
+        addRule: PropTypes.string,
+        /**
+         *<Button> to add a RuleGroup
+         */
+        addGroup: PropTypes.string,
+        /**
+         *<Button> to remove a RuleGroup
+         */
+        removeGroup: PropTypes.string,
+        /**
+         *<div> containing the Rule
+         */
+        rule: PropTypes.string,
+        /**
+         *<Dropdown> control for fields
+         */
+        fields: PropTypes.string,
+        /**
+         *<Dropdown> control for operators
+         */
+        operators: PropTypes.string,
+        /**
+         *<Input> for the field value
+         */
+        value: PropTypes.string,
+        /**
+         *<Button> to remove a Rule
+         */
+        removeRule: PropTypes.string,
+    }),
+    /**
+     * This can be used to override translatable texts created by the <QueryBuilderSemantic />
+     * https://react.semantic-ui.com/elements/icon/
+     */
+    translations: PropTypes.shape({
+        fields: PropTypes.shape({
+            title: PropTypes.string
+        }),
+        operators: PropTypes.shape({
+            title: PropTypes.string
+        }),
+        value: PropTypes.shape({
+            title: PropTypes.string
+        }),
+        removeRule: PropTypes.shape({
+            icon: PropTypes.string,
+            title: PropTypes.string
+        }),
+        removeGroup: PropTypes.shape({
+            icon: PropTypes.string,
+            title: PropTypes.string
+        }),
+        addRule: PropTypes.shape({
+            icon: PropTypes.string,
+            title: PropTypes.string
+        }),
+        addGroup: PropTypes.shape({
+            icon: PropTypes.string,
+            title: PropTypes.string
+        }),
+        combinators: PropTypes.shape({
+            title: PropTypes.string
+        })
+    }),
 };
 
 RuleSemantic.defaultProps = {

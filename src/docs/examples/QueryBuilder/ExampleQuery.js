@@ -1,5 +1,5 @@
 import React from 'react';
-import  QueryBuilder  from 'react-query-builder-semantic/lib/QueryBuilder';
+import QueryBuilder from 'react-query-builder-semantic/lib/QueryBuilder';
 
 
 const fields = [
@@ -60,7 +60,6 @@ export default class ExampleQuery extends React.Component {
                 <div className="scroll">
                     <QueryBuilder fields={fields}
                                   query={this.state.query}
-                                  controlClassnames={{ fields: 'form-control' }}
                                   onQueryChange={this.logQuery} />
                 </div>
                 <div className="shrink query-log scroll">

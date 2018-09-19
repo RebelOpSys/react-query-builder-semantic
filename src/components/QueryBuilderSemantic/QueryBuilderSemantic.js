@@ -42,6 +42,7 @@ function queryToString(query) {
     return result;
 }
 
+
 /**
  * QueryBuilderSemantic is QueryBuilder with react.semantic-ui components.
  * It outputs a structured JSON of rules which can be easily parsed to create SQL/NoSQL/whatever queries.
@@ -79,7 +80,6 @@ class QueryBuilderSemantic extends React.Component {
             schema.fields = nextProps.fields;
             this.setState({ schema });
         }
-
     }
 
     /**
@@ -107,16 +107,14 @@ class QueryBuilderSemantic extends React.Component {
     }
 
     componentWillMount() {
-        const { fields, operators, combinators, controlElements, controlClassNames } = this.props;
-        const classNames = this.mergeProperties(QueryBuilderSemantic.defaultControlClassNames, controlClassNames);
-        const controls = this.mergeProperties(QueryBuilderSemantic.defaultControlElements, controlElements);
+        const { fields, operators, combinators, controlElements } = this.props;
+        const controls = this.mergeProperties(QueryBuilderSemantic.defaultProps.controlElements, controlElements);
         this.setState({
             root: this.getInitialQuery(),
             schema: {
                 fields,
                 operators,
                 combinators,
-                classNames,
                 controls,
             }
         });
@@ -133,13 +131,16 @@ class QueryBuilderSemantic extends React.Component {
 
     render() {
         const { root: { id, rules, combinator }, schema } = this.state;
-        const { translations, combinatorColors, ruleSemanticProps, ruleGroupSemanticProps, } = this.props;
+        const { translations, combinatorColors, ruleSemanticProps, ruleGroupSemanticProps,controlClassNames } = this.props;
+        const updatedClassNames = this.mergeProperties(QueryBuilderSemantic.defaultProps.controlClassNames, controlClassNames);
+        const updatedTranslations = this.mergeProperties(QueryBuilderSemantic.defaultProps.translations, translations);
         return (
-            <Segment.Group fluid raised className={`${schema.classNames.queryBuilder}`}>
+            <Segment.Group fluid={'true'} raised className={`${updatedClassNames.queryBuilder}`}>
                 <RuleGroup
+                    classNames={updatedClassNames}
                     ruleSemanticProps={ruleSemanticProps}
                     ruleGroupSemanticProps={ruleGroupSemanticProps}
-                    translations={translations}
+                    translations={updatedTranslations}
                     combinatorColors={combinatorColors}
                     rules={rules}
                     createRule={this.createRule}
@@ -321,86 +322,6 @@ class QueryBuilderSemantic extends React.Component {
             onQueryChange(query);
         }
     }
-
-    static get defaultTranslations() {
-        return {
-            fields: {
-                title: "Fields",
-            },
-            operators: {
-                title: "Operators",
-            },
-            value: {
-                title: "Value",
-            },
-            removeRule: {
-                title: "Remove rule",
-            },
-            removeGroup: {
-                title: "Remove group",
-            },
-            addRule: {
-                title: "Add rule",
-            },
-            addGroup: {
-                title: "Add group",
-            },
-            combinators: {
-                title: "Combinators",
-            }
-        }
-    }
-
-    static get defaultOperators() {
-        return [
-            { value: 'null', text: 'Is Null' },
-            { value: 'notNull', text: 'Is Not Null' },
-            { value: 'in', text: 'In' },
-            { value: 'notIn', text: 'Not In' },
-            { value: '=', text: '=' },
-            { value: '!=', text: '!=' },
-            { value: '<', text: '<' },
-            { value: '>', text: '>' },
-            { value: '<=', text: '<=' },
-            { value: '>=', text: '>=' },
-        ];
-    }
-
-    static get defaultCombinators() {
-        return [
-            { value: 'and', text: 'AND' },
-            { value: 'or', text: 'OR' },
-        ];
-    }
-
-    static get defaultControlClassNames() {
-        return {
-            queryBuilder: 'query-builder',
-            removeRule: 'group-or-rule__rule-remove',
-            ruleGroup: 'group-or-rule-container__group-or-rule group-or-rule__group',
-            ruleGroupHeader: 'group-or-rule__group-header',
-            ruleGroupContainer: 'query-builder__group-or-rule-container group-or-rule-container__group',
-            combinators: 'group-or-rule__group-combinator',
-            addRule: 'group-or-rule__ruleGroup-addRule',
-            addGroup: 'group-or-rule__ruleGroup-addGroup',
-            removeGroup: 'group-or-rule__ruleGroup-removeGroup',
-            rule: 'group-or-rule-container__group-or-rule group-or-rule__rule',
-            ruleHeader: 'group-or-rule__rule-header',
-            ruleContainer: 'query-builder__group-or-rule-container group-or-rule-container__rule',
-            fields: 'group-or-rule__rule-field',
-            operators: 'group-or-rule__rule-operator',
-            value: 'group-or-rule__rule-value',
-        };
-    }
-
-    static get defaultControlElements() {
-        return {
-            fieldSelector: FieldSelector,
-            operatorSelector: OperatorSelector,
-            valueEditor: ValueEditor
-        };
-    }
-
 }
 
 QueryBuilderSemantic.displayName = 'QueryBuilderSemantic';

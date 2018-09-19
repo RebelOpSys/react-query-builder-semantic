@@ -62,7 +62,7 @@ export default class ExampleCustomValueEditor extends React.Component {
     render() {
         let controlElements = {
             valueEditor: this.customValueEditor()
-        }
+        };
         return (
             <div className="flex-box">
                 <div className="scroll">

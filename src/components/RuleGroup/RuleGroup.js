@@ -13,7 +13,7 @@ class RuleGroup extends React.Component {
     render() {
         const {
             combinator, rules, translations, onRuleRemove, createRule, onRuleAdd, createRuleGroup, onGroupAdd, onGroupRemove,
-            isRuleGroup, getLevel, getOperators, onPropChange, schema: { combinators, controls, classNames }
+            isRuleGroup, getLevel, getOperators, onPropChange, classNames, schema: { combinators, controls }
         } = this.props;
         return (
             <div className={`${classNames.ruleGroupContainer}`}>
@@ -73,6 +73,7 @@ class RuleGroup extends React.Component {
                                     isRuleGroup(rule)
                                         ? <RuleGroup key={rule.id}
                                                      id={rule.id}
+                                                     classNames={classNames}
                                                      schema={this.props.schema}
                                                      parentId={this.props.id}
                                                      onGroupAdd={onGroupAdd}
@@ -88,18 +89,21 @@ class RuleGroup extends React.Component {
                                                      combinator={rule.combinator}
                                                      translations={this.props.translations}
                                                      rules={rule.rules} />
-                                        : <Rule key={rule.id}
-                                                id={rule.id}
-                                                field={rule.field}
-                                                value={rule.value}
-                                                getOperators={getOperators}
-                                                onPropChange={onPropChange}
-                                                getLevel={getLevel}
-                                                operator={rule.operator}
-                                                schema={this.props.schema}
-                                                parentId={this.props.id}
-                                                translations={this.props.translations}
-                                                onRuleRemove={onRuleRemove} />
+                                        : <Rule
+                                            key={rule.id}
+                                            id={rule.id}
+                                            classNames={classNames}
+                                            field={rule.field}
+                                            value={rule.value}
+                                            getOperators={getOperators}
+                                            onPropChange={onPropChange}
+                                            getLevel={getLevel}
+                                            operator={rule.operator}
+                                            schema={this.props.schema}
+                                            parentId={this.props.id}
+                                            translations={this.props.translations}
+                                            onRuleRemove={onRuleRemove}
+                                        />
                                 );
                             })
                         }
@@ -209,6 +213,89 @@ RuleGroup.propTypes = {
      * Current schema from QueryBuilder
      */
     schema: PropTypes.object,
+    /**
+     * This can be used to override translatable texts created by the <QueryBuilderSemantic />
+     * https://react.semantic-ui.com/elements/icon/
+     */
+    translations: PropTypes.shape({
+        fields: PropTypes.shape({
+            title: PropTypes.string
+        }),
+        operators: PropTypes.shape({
+            title: PropTypes.string
+        }),
+        value: PropTypes.shape({
+            title: PropTypes.string
+        }),
+        removeRule: PropTypes.shape({
+            icon: PropTypes.string,
+            title: PropTypes.string
+        }),
+        removeGroup: PropTypes.shape({
+            icon: PropTypes.string,
+            title: PropTypes.string
+        }),
+        addRule: PropTypes.shape({
+            icon: PropTypes.string,
+            title: PropTypes.string
+        }),
+        addGroup: PropTypes.shape({
+            icon: PropTypes.string,
+            title: PropTypes.string
+        }),
+        combinators: PropTypes.shape({
+            title: PropTypes.string
+        })
+    }),
+    /**
+     * This can be used to assign specific CSS classes to various controls that are created by the QueryBuilderSemantic
+     */
+    classNames: PropTypes.shape({
+        /**
+         *Root <div> element
+         */
+        queryBuilder: PropTypes.string,
+        /**
+         *<div> containing the RuleGroup
+         */
+        ruleGroup: PropTypes.string,
+        /**
+         *<Dropdown> control for combinators
+         */
+        combinators: PropTypes.string,
+        /**
+         *<Button> to add a Rule
+         */
+        addRule: PropTypes.string,
+        /**
+         *<Button> to add a RuleGroup
+         */
+        addGroup: PropTypes.string,
+        /**
+         *<Button> to remove a RuleGroup
+         */
+        removeGroup: PropTypes.string,
+        /**
+         *<div> containing the Rule
+         */
+        rule: PropTypes.string,
+        /**
+         *<Dropdown> control for fields
+         */
+        fields: PropTypes.string,
+        /**
+         *<Dropdown> control for operators
+         */
+        operators: PropTypes.string,
+        /**
+         *<Input> for the field value
+         */
+        value: PropTypes.string,
+        /**
+         *<Button> to remove a Rule
+         */
+        removeRule: PropTypes.string,
+    }),
 };
 
 RuleGroup.defaultProps = {

@@ -1,7 +1,7 @@
 import React from 'react';
 import 'semantic-ui-css/semantic.min.css';
 import QueryBuilderSemantic from 'react-query-builder-semantic/lib/QueryBuilderSemantic';
-import {  Input } from 'semantic-ui-react';
+import { Input } from 'semantic-ui-react';
 
 
 const fields = [
@@ -38,8 +38,8 @@ export default class ExampleCustomValueEditor extends React.Component {
                 if (this.props.operator === 'null' || this.props.operator === 'notNull') {
                     return null;
                 }
-                    return <Input error={!this.props.value}
-                                  onChange={(e, { value }) => this.props.handleOnChange(value)} />
+                return <Input error={!this.props.value}
+                              onChange={(e, { value }) => this.props.handleOnChange(value)} className={'test'} />
             }
         };
         return customValue;
@@ -54,7 +54,6 @@ export default class ExampleCustomValueEditor extends React.Component {
                 <div className="scroll">
                     <QueryBuilderSemantic fields={fields}
                                           query={this.state.query}
-                                          buttonSize={'mini'}
                                           controlElements={controlElements}
                                           onQueryChange={this.logQuery} />
                 </div>
