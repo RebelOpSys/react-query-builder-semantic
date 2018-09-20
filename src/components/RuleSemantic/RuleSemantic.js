@@ -46,17 +46,18 @@ class RuleSemantic extends React.Component {
                             }
                         )
                     }
-                    {React.createElement(controls.valueEditor,
-                        {
-                            field: field,
-                            title: translations.value.title,
-                            operator: operator,
-                            ruleSemanticProps,
-                            value: value,
-                            className: `${classNames.value}`,
-                            handleOnChange: this.onValueChanged,
-                        }
-                    )
+                    {
+                        React.createElement(controls.valueEditor,
+                            {
+                                field: field,
+                                title: translations.value.title,
+                                operator: operator,
+                                ruleSemanticProps,
+                                value: value,
+                                className: `${classNames.value}`,
+                                handleOnChange: this.onValueChanged,
+                            }
+                        )
                     }
                     <Button
                         {...ruleSemanticProps.deleteRuleButton}

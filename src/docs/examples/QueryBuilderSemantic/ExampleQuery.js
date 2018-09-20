@@ -18,33 +18,47 @@ export default class ExampleQuery extends React.Component {
     constructor() {
         super();
         this.state = {
-            query: {
-                "id": "g-9eb72517-13ec-4a49-93f5-64fd84389811",
+            query:{
+                "id": "g-NDJp297p2",
                 "type": "group",
                 "rules": [
                     {
-                        "id": "r-8bab2387-30c0-4c0f-a7ae-2ccc17873f92",
+                        "id": "r-QaAQfsjcr",
                         "field": "firstName",
                         "type": "rule",
-                        "value": "jacques",
+                        "value": "Jacques",
                         "operator": "="
                     },
                     {
-                        "id": "g-821bc7e0-19a8-497b-925f-2793d92d67b6",
+                        "id": "r-UIoU-TpXU",
+                        "field": "lastName",
+                        "type": "rule",
+                        "value": "Nel",
+                        "operator": "="
+                    },
+                    {
+                        "id": "g-EoSx7qSNE",
                         "type": "group",
                         "rules": [
                             {
-                                "id": "r-97e2e20e-7d6d-40f3-b610-877325177928",
+                                "id": "r-fbx87YJ3G",
+                                "field": "age",
+                                "type": "rule",
+                                "value": "35",
+                                "operator": ">"
+                            },
+                            {
+                                "id": "r-9ge_85CmZ",
                                 "field": "lastName",
                                 "type": "rule",
-                                "value": "nel",
+                                "value": "Nel",
                                 "operator": "="
                             }
                         ],
-                        "combinator": "or"
+                        "combinator": "and"
                     }
                 ],
-                "combinator": "and"
+                "combinator": "or"
             }
         };
         this.logQuery = this.logQuery.bind(this)

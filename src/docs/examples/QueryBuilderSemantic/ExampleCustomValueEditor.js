@@ -9,8 +9,6 @@ const fields = [
     { value: 'lastName', text: 'Last Name' },
     { value: 'age', text: 'Age' },
     { value: 'address', text: 'Address' },
-    { value: 'phone', text: 'Phone' },
-    { value: 'email', text: 'Email' },
 ];
 
 /** QueryBuilderSemantic with custom value editor    */
@@ -38,8 +36,8 @@ export default class ExampleCustomValueEditor extends React.Component {
                 if (this.props.operator === 'null' || this.props.operator === 'notNull') {
                     return null;
                 }
-                return <Input error={!this.props.value}
-                              onChange={(e, { value }) => this.props.handleOnChange(value)} className={'test'} />
+                return <Input error={!this.props.value} value={this.props.value}
+                              onChange={(e, { value }) => this.props.handleOnChange(value)} />
             }
         };
         return customValue;
@@ -48,14 +46,14 @@ export default class ExampleCustomValueEditor extends React.Component {
     render() {
         let controlElements = {
             valueEditor: this.customValueEditor()
-        }
+        };
         return (
             <div className="flex-box">
                 <div className="scroll">
                     <QueryBuilderSemantic fields={fields}
-                                          query={this.state.query}
-                                          controlElements={controlElements}
-                                          onQueryChange={this.logQuery} />
+                                               query={this.state.query}
+                                               controlElements={controlElements}
+                                               onQueryChange={this.logQuery} />
                 </div>
                 <div className="shrink query-log scroll">
                     <h4>Query</h4>

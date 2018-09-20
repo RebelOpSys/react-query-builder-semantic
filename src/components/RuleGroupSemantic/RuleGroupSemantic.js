@@ -17,9 +17,9 @@ class RuleGroupSemantic extends React.Component {
      * and return the color for that combination
      * @returns {String}
      */
-    getColorForCombinator() {
+    getColorForCombinator(combinator) {
         const combination = this.props.combinatorColors.filter((colorCombination) => {
-            return colorCombination.combinator === this.props.combinator
+            return colorCombination.combinator === combinator
         });
 
         if (combination) {
@@ -29,13 +29,14 @@ class RuleGroupSemantic extends React.Component {
 
     render() {
         const {
-            combinator, rules, translations, onRuleRemove, createRule, onRuleAdd, createRuleGroup, onGroupAdd, onGroupRemove,
+            combinator,parentCombinator, rules, translations, onRuleRemove, createRule, onRuleAdd, createRuleGroup, onGroupAdd, onGroupRemove,
             isRuleGroup, getLevel, getOperators, onPropChange, ruleSemanticProps, ruleGroupSemanticProps, classNames,
             schema: { combinators }
         } = this.props;
         return (
             <div className={`${classNames.ruleGroupContainer}`}>
                 <Segment.Group {...ruleGroupSemanticProps.segment} className={`${classNames.ruleGroup}`}>
+                    { this.hasParentGroup() ? <Segment color={this.getColorForCombinator(parentCombinator)} compact style={{paddingTop : '0px',marginBottom:'-12px'}} /> : null}
                     <div className={classNames.ruleGroupHeader}>
                         <Dropdown
                             {...ruleGroupSemanticProps.dropDown}
@@ -66,6 +67,7 @@ class RuleGroupSemantic extends React.Component {
                         }
                     </div>
                     <div className="group-or-rule__group-children">
+
                         {
                             rules.map(rule => {
                                 return (
@@ -77,6 +79,7 @@ class RuleGroupSemantic extends React.Component {
                                                              ruleSemanticProps={ruleSemanticProps}
                                                              schema={this.props.schema}
                                                              parentId={this.props.id}
+                                                             parentCombinator={this.props.combinator}
                                                              onGroupAdd={onGroupAdd}
                                                              getLevel={getLevel}
                                                              isRuleGroup={isRuleGroup}
@@ -101,7 +104,7 @@ class RuleGroupSemantic extends React.Component {
                                             getOperators={getOperators}
                                             onPropChange={onPropChange}
                                             combinator={combinator}
-                                            combinatorColor={this.getColorForCombinator()}
+                                            combinatorColor={this.getColorForCombinator(this.props.combinator)}
                                             getLevel={getLevel}
                                             operator={rule.operator}
                                             schema={this.props.schema}
@@ -265,6 +268,10 @@ RuleGroupSemantic.propTypes = {
      *  Id for the RuleGroup this RuleGroup is nested in
      */
     parentId: PropTypes.any,
+    /**
+     *  The selected combinator for the RuleGroup this RuleGroup is nested in
+     */
+    parentCombinator: PropTypes.any,
     /**
      * Array of current Rules
      */

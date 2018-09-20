@@ -6,7 +6,7 @@ import RuleGroup from '../RuleGroupSemantic';
 import OperatorSelector from '../OperatorSelectorSemantic';
 import FieldSelector from '../FieldSelectorSemantic';
 import ValueEditor from '../ValueEditorSemantic';
-import { Label, Segment } from 'semantic-ui-react';
+import { Segment } from 'semantic-ui-react';
 import _ from 'lodash';
 
 
@@ -108,7 +108,7 @@ class QueryBuilderSemantic extends React.Component {
 
     componentWillMount() {
         const { fields, operators, combinators, controlElements } = this.props;
-        const controls = this.mergeProperties(QueryBuilderSemantic.defaultProps.controlElements, controlElements);
+        const controls = Object.assign({},this.mergeProperties(QueryBuilderSemantic.defaultControlElements, controlElements));
         this.setState({
             root: this.getInitialQuery(),
             schema: {
@@ -131,9 +131,9 @@ class QueryBuilderSemantic extends React.Component {
 
     render() {
         const { root: { id, rules, combinator }, schema } = this.state;
-        const { translations, combinatorColors, ruleSemanticProps, ruleGroupSemanticProps,controlClassNames } = this.props;
-        const updatedClassNames = this.mergeProperties(QueryBuilderSemantic.defaultProps.controlClassNames, controlClassNames);
-        const updatedTranslations = this.mergeProperties(QueryBuilderSemantic.defaultProps.translations, translations);
+        const { translations, combinatorColors, ruleSemanticProps, ruleGroupSemanticProps, controlClassNames } = this.props;
+        const updatedClassNames = Object.assign({},this.mergeProperties(QueryBuilderSemantic.defaultClassNames, controlClassNames));
+        const updatedTranslations = Object.assign({},this.mergeProperties(QueryBuilderSemantic.defaultTranslations, translations));
         return (
             <Segment.Group fluid={'true'} raised className={`${updatedClassNames.queryBuilder}`}>
                 <RuleGroup
@@ -157,6 +157,7 @@ class QueryBuilderSemantic extends React.Component {
                     schema={schema}
                     id={id}
                     parentId={null}
+                    parentCombinator={combinator}
                 />
             </Segment.Group>
         );
@@ -177,7 +178,7 @@ class QueryBuilderSemantic extends React.Component {
         return {
             id: `r-${shortid.generate()}`,
             field: fields[0].value,
-            type:'rule',
+            type: 'rule',
             value: '',
             operator: operators[0].value
         };
@@ -186,7 +187,7 @@ class QueryBuilderSemantic extends React.Component {
     createRuleGroup() {
         return {
             id: `g-${shortid.generate()}`,
-            type:'group',
+            type: 'group',
             rules: [],
             combinator: this.props.combinators[0].value,
         };
@@ -322,6 +323,79 @@ class QueryBuilderSemantic extends React.Component {
             onQueryChange(query);
         }
     }
+
+    /**
+     * default control elements to merge with due to cant use default props as duplication of this component will result in the
+     * others using the same control elements from other instantiations of this component
+     * @returns {{fieldSelector, operatorSelector, valueEditor}}
+     */
+    static get defaultControlElements() {
+        return {
+            fieldSelector: FieldSelector,
+            operatorSelector: OperatorSelector,
+            valueEditor: ValueEditor
+        }
+    }
+
+    /**
+     * default translations to merge with due to cant use default props as duplication of this component will result in the
+     * others using the same translations from other instantiations of this component
+     * @returns {{fields: {title: string}, operators: {title: string}, value: {title: string}, removeRule: {title: string}, removeGroup: {title: string}, addRule: {title: string}, addGroup: {title: string}, combinators: {title: string}}}
+     */
+    static get defaultTranslations () {
+        return {
+            fields: {
+                title: "Fields",
+            },
+            operators: {
+                title: "Operators",
+            },
+            value: {
+                title: "Value",
+            },
+            removeRule: {
+                title: "Remove rule",
+            },
+            removeGroup: {
+                title: "Remove group",
+            },
+            addRule: {
+                title: "Add rule",
+            },
+            addGroup: {
+                title: "Add group",
+            },
+            combinators: {
+                title: "Combinators",
+            }
+        }
+    }
+
+    /**
+     * default class names to merge with due to cant use default props as duplication of this component will result in the
+     * others using the same class names from other instantiations of this component
+     * @returns {{queryBuilder: string, removeRule: string, ruleGroup: string, ruleGroupHeader: string, ruleGroupContainer: string, combinators: string, addRule: string, addGroup: string, removeGroup: string, rule: string, ruleHeader: string, ruleContainer: string, fields: string, operators: string, value: string}}
+     */
+    static get defaultClassNames () {
+        return {
+            queryBuilder: 'query-builder',
+            removeRule: 'group-or-rule__rule-remove',
+            ruleGroup: 'group-or-rule-container__group-or-rule group-or-rule__group',
+            ruleGroupHeader: 'group-or-rule__group-header',
+            ruleGroupContainer: 'query-builder__group-or-rule-container group-or-rule-container__group',
+            combinators: 'group-or-rule__group-combinator',
+            addRule: 'group-or-rule__ruleGroup-addRule',
+            addGroup: 'group-or-rule__ruleGroup-addGroup',
+            removeGroup: 'group-or-rule__ruleGroup-removeGroup',
+            rule: 'group-or-rule-container__group-or-rule group-or-rule__rule',
+            ruleHeader: 'group-or-rule__rule-header',
+            ruleContainer: 'query-builder__group-or-rule-container group-or-rule-container__rule',
+            fields: 'group-or-rule__rule-field',
+            operators: 'group-or-rule__rule-operator',
+            value: 'group-or-rule__rule-value',
+        }
+    }
+
 }
 
 QueryBuilderSemantic.displayName = 'QueryBuilderSemantic';
@@ -349,12 +423,12 @@ QueryBuilderSemantic.defaultProps = {
         {
             text: 'AND',
             value: 'and',
-            content: <Label color={'purple'} content='AND' circular />,
+            label: { color: 'purple', empty: true, circular: true },
         },
         {
             text: 'OR',
             value: 'or',
-            content: <Label color={'blue'} content='OR' circular />,
+            label: { color: 'blue', empty: true, circular: true },
         }
     ],
     translations: {
@@ -420,13 +494,11 @@ QueryBuilderSemantic.defaultProps = {
     },
     ruleGroupSemanticProps: {
         dropDown: {
-            button: true,
             attached: 'left',
-            className: 'icon',
             size: 'tiny',
             labeled: true,
             scrolling: true,
-            icon: 'filter'
+            selection: true,
         },
         segment: {
             size: 'tiny',
@@ -542,16 +614,16 @@ QueryBuilderSemantic.propTypes = {
      The array of operators that should be used.
      */
     operators: PropTypes.arrayOf(PropTypes.shape({
-        value: PropTypes.string.isRequired,
-        text: PropTypes.string.isRequired,
+        value: PropTypes.string,
+        text: PropTypes.string,
     })),
     /**
      * The array of combinators that should be used for RuleGroups
      */
     combinators: PropTypes.arrayOf(PropTypes.shape({
-        value: PropTypes.string.isRequired,
+        value: PropTypes.string,
         content: PropTypes.any,
-        text: PropTypes.string.isRequired,
+        text: PropTypes.string,
     })),
     /**
      * The array of colors to use for the selected combinator

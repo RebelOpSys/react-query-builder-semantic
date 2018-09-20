@@ -7,19 +7,18 @@ import { Input } from 'semantic-ui-react';
  */
 const ValueEditorSemantic = (props) => {
     const { operator, value, handleOnChange, title, className, ruleSemanticProps } = props;
-
     if (operator === 'null' || operator === 'notNull') {
         return null;
     }
 
     return (
         <Input
-               {...ruleSemanticProps.valueEditor}
-               error={!value}
-               className={className}
-               value={value}
-               title={title}
-               onChange={e => handleOnChange(e.target.value)} />
+            {...ruleSemanticProps.valueEditor}
+            error={!value}
+            className={className}
+            value={value}
+            title={title}
+            onChange={e => handleOnChange(e.target.value)} />
     );
 };
 

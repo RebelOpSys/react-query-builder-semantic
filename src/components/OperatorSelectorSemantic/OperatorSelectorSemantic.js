@@ -7,7 +7,6 @@ import { Dropdown } from 'semantic-ui-react';
  */
 const OperatorSelectorSemantic = (props) => {
     const { value, options, className, handleOnChange, title,ruleSemanticProps } = props;
-
     return (
         <Dropdown
             {...ruleSemanticProps.operatorSelector}

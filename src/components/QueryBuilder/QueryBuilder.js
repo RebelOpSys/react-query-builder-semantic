@@ -107,7 +107,7 @@ class QueryBuilder extends React.Component {
 
     componentWillMount() {
         const { fields, operators, combinators, controlElements } = this.props;
-        const controls = this.mergeProperties(QueryBuilder.defaultProps.controlElements, controlElements);
+        const controls = Object.assign({},this.mergeProperties(QueryBuilder.defaultControlElements, controlElements));
         this.setState({
             root: this.getInitialQuery(),
             schema: {
@@ -130,9 +130,9 @@ class QueryBuilder extends React.Component {
 
     render() {
         const { root: { id, rules, combinator }, schema } = this.state;
-        const { translations,controlClassNames } = this.props;
-        const updatedClassNames = this.mergeProperties(QueryBuilder.defaultProps.controlClassNames, controlClassNames);
-        const updatedTranslations = this.mergeProperties(QueryBuilder.defaultProps.translations, translations);
+        const { translations, controlClassNames } = this.props;
+        const updatedClassNames = Object.assign({},this.mergeProperties(QueryBuilder.defaultClassNames, controlClassNames));
+        const updatedTranslations = Object.assign({},this.mergeProperties(QueryBuilder.defaultTranslations, translations));
         return (
             <div className={`${updatedClassNames.queryBuilder}`}>
                 <RuleGroup
@@ -172,7 +172,7 @@ class QueryBuilder extends React.Component {
 
         return {
             id: `r-${shortid.generate()}`,
-            type:'rule',
+            type: 'rule',
             field: fields[0].name,
             value: '',
             operator: operators[0].name
@@ -182,7 +182,7 @@ class QueryBuilder extends React.Component {
     createRuleGroup() {
         return {
             id: `g-${shortid.generate()}`,
-            type:'group',
+            type: 'group',
             rules: [],
             combinator: this.props.combinators[0].name,
         };
@@ -318,6 +318,89 @@ class QueryBuilder extends React.Component {
             onQueryChange(query);
         }
     }
+
+    /**
+     * default control elements to merge with due to cant use default props as duplication of this component will result in the
+     * others using the same control elements from other instantiations of this component
+     * @returns {{addGroupAction, removeGroupAction, addRuleAction, removeRuleAction, combinatorSelector, fieldSelector, operatorSelector, valueEditor}}
+     */
+    static get defaultControlElements() {
+        return {
+            addGroupAction: ActionElement,
+            removeGroupAction: ActionElement,
+            addRuleAction: ActionElement,
+            removeRuleAction: ActionElement,
+            combinatorSelector: ValueSelector,
+            fieldSelector: ValueSelector,
+            operatorSelector: ValueSelector,
+            valueEditor: ValueEditor
+        }
+    }
+
+    /**
+     * default translations to merge with due to cant use default props as duplication of this component will result in the
+     * others using the same translations from other instantiations of this component
+     * @returns {{fields: {title: string}, operators: {title: string}, value: {title: string}, removeRule: {label: string, title: string}, removeGroup: {label: string, title: string}, addRule: {label: string, title: string}, addGroup: {label: string, title: string}, combinators: {title: string}}}
+     */
+    static get defaultTranslations () {
+        return {
+            fields: {
+                title: "Fields",
+            },
+            operators: {
+                title: "Operators",
+            },
+            value: {
+                title: "Value",
+            },
+            removeRule: {
+                label: "x",
+                title: "Remove rule",
+            },
+            removeGroup: {
+                label: "x",
+                title: "Remove group",
+            },
+            addRule: {
+                label: "+Rule",
+                title: "Add rule",
+            },
+            addGroup: {
+                label: "+Group",
+                title: "Add group",
+            },
+            combinators: {
+                title: "Combinators",
+            }
+        }
+    }
+
+    /**
+     * default class names to merge with due to cant use default props as duplication of this component will result in the
+     * others using the same class names from other instantiations of this component
+     * @returns {{queryBuilder: string, removeRule: string, ruleGroup: string, ruleGroupHeader: string, ruleGroupContainer: string, ruleGroupCombinators: string, combinators: string, ruleGroupActions: string, addRule: string, addGroup: string, removeGroup: string, rule: string, ruleHeader: string, ruleContainer: string, fields: string, operators: string, value: string}}
+     */
+    static get defaultClassNames () {
+        return {
+            queryBuilder: 'query-builder',
+            removeRule: 'group-or-rule__rule-remove',
+            ruleGroup: 'group-or-rule-container__group-or-rule group-or-rule__group',
+            ruleGroupHeader: 'group-or-rule__group-header',
+            ruleGroupContainer: 'query-builder__group-or-rule-container group-or-rule-container__group',
+            ruleGroupCombinators: 'group-or-rule__group-combinators',
+            combinators: 'group-or-rule__group-combinator',
+            ruleGroupActions: 'group-or-rule__group-actions',
+            addRule: 'group-or-rule__ruleGroup-addRule',
+            addGroup: 'group-or-rule__ruleGroup-addGroup',
+            removeGroup: 'group-or-rule__ruleGroup-removeGroup',
+            rule: 'group-or-rule-container__group-or-rule group-or-rule__rule',
+            ruleHeader: 'group-or-rule__rule-header',
+            ruleContainer: 'query-builder__group-or-rule-container group-or-rule-container__rule',
+            fields: 'group-or-rule__rule-field',
+            operators: 'group-or-rule__rule-operator',
+            value: 'group-or-rule__rule-value',
+        }
+    }
 }
 
 QueryBuilder.displayName = 'QueryBuilder';
@@ -369,39 +452,20 @@ QueryBuilder.defaultProps = {
         },
         combinators: {
             title: "Combinators",
-        },
-        controlElements: {
-            addGroupAction: ActionElement,
-            removeGroupAction: ActionElement,
-            addRuleAction: ActionElement,
-            removeRuleAction: ActionElement,
-            combinatorSelector: ValueSelector,
-            fieldSelector: ValueSelector,
-            operatorSelector: ValueSelector,
-            valueEditor: ValueEditor
-        },
-        getOperators: null,
-        onQueryChange: null,
-        controlClassNames: {
-            queryBuilder: 'query-builder',
-            removeRule: 'rule--remove',
-            ruleGroup: 'group group-or-rule',
-            ruleGroupHeader: 'group--header',
-            ruleGroupContainer: 'group-or-rule-container group-container',
-            ruleGroupCombinators: 'group--combinators',
-            combinators: 'ruleGroup--combinators',
-            ruleGroupActions: 'group--actions',
-            addRule: 'ruleGroup--addRule',
-            addGroup: 'ruleGroup--addGroup',
-            removeGroup: 'ruleGroup--removeGroup',
-            rule: 'rule group-or-rule',
-            ruleHeader: 'rule--header',
-            ruleContainer: 'group-or-rule-container rule-container',
-            fields: 'rule--field',
-            operators: 'rule--operator',
-            value: 'rule--value',
         }
     },
+    controlElements: {
+        addGroupAction: ActionElement,
+        removeGroupAction: ActionElement,
+        addRuleAction: ActionElement,
+        removeRuleAction: ActionElement,
+        combinatorSelector: ValueSelector,
+        fieldSelector: ValueSelector,
+        operatorSelector: ValueSelector,
+        valueEditor: ValueEditor
+    },
+    getOperators: null,
+    onQueryChange: null,
     controlClassNames: {
         queryBuilder: 'query-builder',
         removeRule: 'group-or-rule__rule-remove',
@@ -421,16 +485,6 @@ QueryBuilder.defaultProps = {
         operators: 'group-or-rule__rule-operator',
         value: 'group-or-rule__rule-value',
     },
-    controlElements:{
-        addGroupAction: ActionElement,
-        removeGroupAction: ActionElement,
-        addRuleAction: ActionElement,
-        removeRuleAction: ActionElement,
-        combinatorSelector: ValueSelector,
-        fieldSelector: ValueSelector,
-        operatorSelector: ValueSelector,
-        valueEditor: ValueEditor
-    }
 };
 
 QueryBuilder.propTypes = {

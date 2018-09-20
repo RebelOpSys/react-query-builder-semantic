@@ -6,8 +6,7 @@ import { Dropdown } from 'semantic-ui-react';
  * Default Semantic element to select a field for a Rule in the QueryBuilderSemantic
  */
 const FieldSelectorSemantic = (props) => {
-    const { value, options, className, handleOnChange, title,ruleSemanticProps } = props;
-
+    const { value, options, className, handleOnChange, title, ruleSemanticProps } = props;
     return (
         <Dropdown
             {...ruleSemanticProps.fieldSelector}
