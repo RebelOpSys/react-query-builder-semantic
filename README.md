@@ -119,6 +119,13 @@ The array of fields that should be used. Each field should be an object with
 
 `{value:String, text:String}`
 
+#### values *(Optional)*
+[ {value:String, text:String} ]
+
+The array of values that should be used. Each value should be an object with
+
+`{value:String, text:String}`
+
 #### operators *(Optional)*
 [ {value:String, text:String} ]
 
@@ -237,6 +244,7 @@ The following control overrides are supported:
          */
         valueEditor: PropTypes.any,
     }),
+    values: React.PropTypes.array //values corresponding to this Rule
     field: React.PropTypes.string, //field name corresponding to this Rule
     operator: React.PropTypes.string, //operator name corresponding to this Rule
     value: React.PropTypes.string, //value from the existing query representation, if any

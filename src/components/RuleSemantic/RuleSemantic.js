@@ -15,7 +15,7 @@ class RuleSemantic extends React.Component {
     render() {
         const {
             field, operator, combinatorColor, ruleSemanticProps, value, translations, getOperators, classNames,
-            schema: { fields, controls }
+            schema: { fields, controls, values }
         } = this.props;
         return (
             <div className={`${classNames.ruleContainer}`}>
@@ -53,6 +53,7 @@ class RuleSemantic extends React.Component {
                                 title: translations.value.title,
                                 operator: operator,
                                 ruleSemanticProps,
+                                values: values,
                                 value: value,
                                 className: `${classNames.value}`,
                                 handleOnChange: this.onValueChanged,

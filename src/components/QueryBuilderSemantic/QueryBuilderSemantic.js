@@ -107,12 +107,13 @@ class QueryBuilderSemantic extends React.Component {
     }
 
     componentWillMount() {
-        const { fields, operators, combinators, controlElements } = this.props;
-        const controls = Object.assign({},this.mergeProperties(QueryBuilderSemantic.defaultControlElements, controlElements));
+        const { fields, values, operators, combinators, controlElements } = this.props;
+        const controls = Object.assign({}, this.mergeProperties(QueryBuilderSemantic.defaultControlElements, controlElements));
         this.setState({
             root: this.getInitialQuery(),
             schema: {
                 fields,
+                values,
                 operators,
                 combinators,
                 controls,
@@ -132,8 +133,8 @@ class QueryBuilderSemantic extends React.Component {
     render() {
         const { root: { id, rules, combinator }, schema } = this.state;
         const { translations, combinatorColors, ruleSemanticProps, ruleGroupSemanticProps, controlClassNames } = this.props;
-        const updatedClassNames = Object.assign({},this.mergeProperties(QueryBuilderSemantic.defaultClassNames, controlClassNames));
-        const updatedTranslations = Object.assign({},this.mergeProperties(QueryBuilderSemantic.defaultTranslations, translations));
+        const updatedClassNames = Object.assign({}, this.mergeProperties(QueryBuilderSemantic.defaultClassNames, controlClassNames));
+        const updatedTranslations = Object.assign({}, this.mergeProperties(QueryBuilderSemantic.defaultTranslations, translations));
         return (
             <Segment.Group fluid={'true'} raised className={`${updatedClassNames.queryBuilder}`}>
                 <RuleGroup
@@ -173,13 +174,13 @@ class QueryBuilderSemantic extends React.Component {
     }
 
     createRule() {
-        const { fields, operators } = this.state.schema;
+        const { fields, operators, values } = this.state.schema;
 
         return {
             id: `r-${shortid.generate()}`,
             field: fields[0].value,
             type: 'rule',
-            value: '',
+            value: !_.isEmpty(values) ? values[0].value : '',
             operator: operators[0].value
         };
     }
@@ -340,7 +341,7 @@ class QueryBuilderSemantic extends React.Component {
      * default translations to merge with due to cant use default props as duplication of this component will result in the
      * others using the same translations from other instantiations of this component
      */
-    static get defaultTranslations () {
+    static get defaultTranslations() {
         return {
             fields: {
                 title: "Fields",
@@ -373,7 +374,7 @@ class QueryBuilderSemantic extends React.Component {
      * default class names to merge with due to cant use default props as duplication of this component will result in the
      * others using the same class names from other instantiations of this component
      */
-    static get defaultClassNames () {
+    static get defaultClassNames() {
         return {
             queryBuilder: 'query-builder',
             removeRule: 'group-or-rule__rule-remove',
@@ -400,6 +401,7 @@ QueryBuilderSemantic.displayName = 'QueryBuilderSemantic';
 QueryBuilderSemantic.defaultProps = {
     query: null,
     fields: [],
+    values: [],
     operators: [
         { value: 'null', text: 'Is Null' },
         { value: 'notNull', text: 'Is Not Null' },
@@ -607,6 +609,13 @@ QueryBuilderSemantic.propTypes = {
         value: PropTypes.string.isRequired,
         text: PropTypes.string.isRequired,
     })).isRequired,
+    /**
+     *  The array of values that should be used. Each value should be an object with
+     */
+    values: PropTypes.arrayOf(PropTypes.shape({
+        value: PropTypes.string.isRequired,
+        text: PropTypes.string.isRequired,
+    })),
     /**
      The array of operators that should be used.
      */
