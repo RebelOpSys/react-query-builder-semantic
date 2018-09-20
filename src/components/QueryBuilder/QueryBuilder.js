@@ -319,10 +319,9 @@ class QueryBuilder extends React.Component {
         }
     }
 
-    /**
+    /*
      * default control elements to merge with due to cant use default props as duplication of this component will result in the
      * others using the same control elements from other instantiations of this component
-     * @returns {{addGroupAction, removeGroupAction, addRuleAction, removeRuleAction, combinatorSelector, fieldSelector, operatorSelector, valueEditor}}
      */
     static get defaultControlElements() {
         return {
@@ -337,10 +336,9 @@ class QueryBuilder extends React.Component {
         }
     }
 
-    /**
+    /*
      * default translations to merge with due to cant use default props as duplication of this component will result in the
      * others using the same translations from other instantiations of this component
-     * @returns {{fields: {title: string}, operators: {title: string}, value: {title: string}, removeRule: {label: string, title: string}, removeGroup: {label: string, title: string}, addRule: {label: string, title: string}, addGroup: {label: string, title: string}, combinators: {title: string}}}
      */
     static get defaultTranslations () {
         return {
@@ -375,10 +373,9 @@ class QueryBuilder extends React.Component {
         }
     }
 
-    /**
+    /*
      * default class names to merge with due to cant use default props as duplication of this component will result in the
      * others using the same class names from other instantiations of this component
-     * @returns {{queryBuilder: string, removeRule: string, ruleGroup: string, ruleGroupHeader: string, ruleGroupContainer: string, ruleGroupCombinators: string, combinators: string, ruleGroupActions: string, addRule: string, addGroup: string, removeGroup: string, rule: string, ruleHeader: string, ruleContainer: string, fields: string, operators: string, value: string}}
      */
     static get defaultClassNames () {
         return {
@@ -484,7 +481,7 @@ QueryBuilder.defaultProps = {
         fields: 'group-or-rule__rule-field',
         operators: 'group-or-rule__rule-operator',
         value: 'group-or-rule__rule-value',
-    },
+    }
 };
 
 QueryBuilder.propTypes = {
