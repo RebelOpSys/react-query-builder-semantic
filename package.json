@@ -5,13 +5,9 @@
   "readme": "README.md",
   "repository": {
     "type": "git",
-    "url": "https://github.com/RebelOpSys/react-query-builder-semantic"
+    "url": "git+https://github.com/RebelOpSys/react-query-builder-semantic.git"
   },
-  "author": {
-    "name": "Trixta",
-    "email": "developer@trixta.com",
-    "url": "http://trixta.com/"
-  },
+  "author": "Trixta <developer@trixta.com> (http://trixta.com/)",
   "contributors": [
     "Jacques Nel"
   ],
@@ -171,5 +167,9 @@
   },
   "eslintConfig": {
     "extends": "react-app"
+  },
+  "description": "README.md",
+  "directories": {
+    "lib": "lib"
   }
 }
