@@ -3,14 +3,6 @@ import 'semantic-ui-css/semantic.min.css';
 import QueryBuilderSemantic from 'react-query-builder-semantic/lib/QueryBuilderSemantic';
 import { Input } from 'semantic-ui-react';
 
-
-const fields = [
-    { value: 'firstName', text: 'First Name' },
-    { value: 'lastName', text: 'Last Name' },
-    { value: 'age', text: 'Age' },
-    { value: 'address', text: 'Address' },
-];
-
 /** QueryBuilderSemantic with custom value editor    */
 export default class ExampleCustomValueEditor extends React.Component {
     constructor() {
@@ -50,10 +42,16 @@ export default class ExampleCustomValueEditor extends React.Component {
         return (
             <div className="flex-box">
                 <div className="scroll">
-                    <QueryBuilderSemantic fields={fields}
-                                               query={this.state.query}
-                                               controlElements={controlElements}
-                                               onQueryChange={this.logQuery} />
+                    <QueryBuilderSemantic
+                        fields={[
+                            { value: 'firstName', text: 'First Name' },
+                            { value: 'lastName', text: 'Last Name' },
+                            { value: 'age', text: 'Age' },
+                            { value: 'address', text: 'Address' },
+                        ]}
+                        query={this.state.query}
+                        controlElements={controlElements}
+                        onQueryChange={this.logQuery} />
                 </div>
                 <div className="shrink query-log scroll">
                     <h4>Query</h4>

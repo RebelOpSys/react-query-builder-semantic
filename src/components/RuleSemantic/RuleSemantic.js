@@ -83,7 +83,6 @@ class RuleSemantic extends React.Component {
 
     onElementChanged = (property, value) => {
         const { id, onPropChange } = this.props;
-
         onPropChange(property, value, id);
     }
 

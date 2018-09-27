@@ -1,18 +1,6 @@
 import React from 'react';
 import QueryBuilder from 'react-query-builder-semantic/lib/QueryBuilder';
 
-
-const fields = [
-    { name: 'firstName', label: 'First Name' },
-    { name: 'lastName', label: 'Last Name' },
-    { name: 'age', label: 'Age' },
-    { name: 'address', label: 'Address' },
-    { name: 'phone', label: 'Phone' },
-    { name: 'email', label: 'Email' },
-    { name: 'twitter', label: 'Twitter' },
-    { name: 'isDev', label: 'Is a Developer?', value: false },
-];
-
 /** QueryBuilder with custom value editor    */
 export default class ExampleCustomValueEditor extends React.Component {
     constructor() {
@@ -39,7 +27,7 @@ export default class ExampleCustomValueEditor extends React.Component {
                     return null;
                 }
 
-                if (this.props.field !== 'isDev' ) {
+                if (this.props.field !== 'isDev') {
                     return <input type="text"
                                   value={this.props.value}
                                   className={'group-or-rule__rule-value'}
@@ -66,10 +54,21 @@ export default class ExampleCustomValueEditor extends React.Component {
         return (
             <div className="flex-box">
                 <div className="scroll">
-                    <QueryBuilder fields={fields}
-                                  query={this.state.query}
-                                  controlElements={controlElements}
-                                  onQueryChange={this.logQuery} />
+                    <QueryBuilder
+                        fields={[
+                            { name: 'firstName', label: 'First Name' },
+                            { name: 'lastName', label: 'Last Name' },
+                            { name: 'age', label: 'Age' },
+                            { name: 'address', label: 'Address' },
+                            { name: 'phone', label: 'Phone' },
+                            { name: 'email', label: 'Email' },
+                            { name: 'twitter', label: 'Twitter' },
+                            { name: 'isDev', label: 'Is a Developer?', value: false },
+                        ]}
+                        query={this.state.query}
+                        controlElements={controlElements}
+                        onQueryChange={this.logQuery}
+                    />
                 </div>
                 <div className="shrink query-log scroll">
                     <h4>Query</h4>

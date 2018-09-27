@@ -13,7 +13,7 @@ const FieldSelectorSemantic = (props) => {
             title={title}
             className={className}
             options={options}
-            defaultValue={value}
+            value={value}
             onChange={(e, { value }) => handleOnChange(value)}
         />
     );
@@ -40,8 +40,8 @@ FieldSelectorSemantic.propTypes = {
      *
      */
     options: PropTypes.arrayOf(PropTypes.shape({
-        text: PropTypes.string.isRequired,
-        value: PropTypes.string.isRequired,
+        text: PropTypes.string,
+        value: PropTypes.string,
         key: PropTypes.string
     })).isRequired,
     /**

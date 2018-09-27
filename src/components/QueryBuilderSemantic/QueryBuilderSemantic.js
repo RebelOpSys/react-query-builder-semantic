@@ -51,9 +51,17 @@ class QueryBuilderSemantic extends React.Component {
 
     constructor(...args) {
         super(...args);
+        const { fields, values, operators, combinators, controlElements } = this.props;
+        const controls = Object.assign({}, this.mergeProperties(QueryBuilderSemantic.defaultControlElements, controlElements));
         this.state = {
-            root: {},
-            schema: {},
+            root: this.getInitialQuery(),
+            schema: {
+                fields,
+                values,
+                operators,
+                combinators,
+                controls,
+            },
         };
 
         this.createRule = this.createRule.bind(this);
@@ -70,10 +78,10 @@ class QueryBuilderSemantic extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        let schema = { ...this.state.schema };
+        let schema = Object.assign({},{ ...this.state.schema });
 
         if (this.props.query !== nextProps.query) {
-            this.setState({ root: nextProps.query });
+            this.setState({ root: Object.assign({}, nextProps.query) });
         }
 
         if (schema.fields !== nextProps.fields) {
@@ -107,18 +115,6 @@ class QueryBuilderSemantic extends React.Component {
     }
 
     componentWillMount() {
-        const { fields, values, operators, combinators, controlElements } = this.props;
-        const controls = Object.assign({}, this.mergeProperties(QueryBuilderSemantic.defaultControlElements, controlElements));
-        this.setState({
-            root: this.getInitialQuery(),
-            schema: {
-                fields,
-                values,
-                operators,
-                combinators,
-                controls,
-            }
-        });
 
     }
 

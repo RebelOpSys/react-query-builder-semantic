@@ -50,9 +50,16 @@ class QueryBuilder extends React.Component {
 
     constructor(...args) {
         super(...args);
+        const { fields, operators, combinators, controlElements } = this.props;
+        const controls = Object.assign({}, this.mergeProperties(QueryBuilder.defaultControlElements, controlElements));
         this.state = {
-            root: {},
-            schema: {},
+            root: this.getInitialQuery(),
+            schema: {
+                fields,
+                operators,
+                combinators,
+                controls,
+            }
         };
 
         this.createRule = this.createRule.bind(this);
@@ -69,10 +76,10 @@ class QueryBuilder extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        let schema = { ...this.state.schema };
+        let schema = Object.assign({}, { ...this.state.schema });
 
         if (this.props.query !== nextProps.query) {
-            this.setState({ root: nextProps.query });
+            this.setState({ root: Object.assign({}, nextProps.query) });
         }
 
         if (schema.fields !== nextProps.fields) {
@@ -105,21 +112,6 @@ class QueryBuilder extends React.Component {
         });
     }
 
-    componentWillMount() {
-        const { fields, operators, combinators, controlElements } = this.props;
-        const controls = Object.assign({},this.mergeProperties(QueryBuilder.defaultControlElements, controlElements));
-        this.setState({
-            root: this.getInitialQuery(),
-            schema: {
-                fields,
-                operators,
-                combinators,
-                controls,
-            }
-        });
-
-    }
-
     getInitialQuery() {
         return this.props.query || this.createRuleGroup();
     }
@@ -131,8 +123,8 @@ class QueryBuilder extends React.Component {
     render() {
         const { root: { id, rules, combinator }, schema } = this.state;
         const { translations, controlClassNames } = this.props;
-        const updatedClassNames = Object.assign({},this.mergeProperties(QueryBuilder.defaultClassNames, controlClassNames));
-        const updatedTranslations = Object.assign({},this.mergeProperties(QueryBuilder.defaultTranslations, translations));
+        const updatedClassNames = Object.assign({}, this.mergeProperties(QueryBuilder.defaultClassNames, controlClassNames));
+        const updatedTranslations = Object.assign({}, this.mergeProperties(QueryBuilder.defaultTranslations, translations));
         return (
             <div className={`${updatedClassNames.queryBuilder}`}>
                 <RuleGroup
@@ -297,7 +289,6 @@ class QueryBuilder extends React.Component {
                 }
             }
         }
-
     }
 
     /**
@@ -340,7 +331,7 @@ class QueryBuilder extends React.Component {
      * default translations to merge with due to cant use default props as duplication of this component will result in the
      * others using the same translations from other instantiations of this component
      */
-    static get defaultTranslations () {
+    static get defaultTranslations() {
         return {
             fields: {
                 title: "Fields",
@@ -377,7 +368,7 @@ class QueryBuilder extends React.Component {
      * default class names to merge with due to cant use default props as duplication of this component will result in the
      * others using the same class names from other instantiations of this component
      */
-    static get defaultClassNames () {
+    static get defaultClassNames() {
         return {
             queryBuilder: 'query-builder',
             removeRule: 'group-or-rule__rule-remove',

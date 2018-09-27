@@ -6,7 +6,6 @@ import PropTypes from 'prop-types';
  */
 const ValueEditor = (props) => {
     const { operator, value, handleOnChange, title, className } = props;
-    console.log(props);
     if (operator === 'null' || operator === 'notNull') {
         return null;
     }
