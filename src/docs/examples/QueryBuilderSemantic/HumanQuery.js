@@ -7,7 +7,7 @@ export default class HumanQuery extends React.Component {
     constructor() {
         super();
         this.state = {
-            query:null
+            query: null
         };
         this.logQuery = this.logQuery.bind(this)
     }
@@ -20,17 +20,18 @@ export default class HumanQuery extends React.Component {
         return (
             <div className="flex-box">
                 <div className="scroll">
-                    <QueryBuilderSemantic fields={[
-                        { value: 'firstName', text: 'First Name' },
-                        { value: 'lastName', text: 'Last Name' },
-                        { value: 'age', text: 'Age' },
-                        { value: 'address', text: 'Address' },
-                        { value: 'phone', text: 'Phone' },
-                        { value: 'email', text: 'Email' },
-                        { value: 'twitter', text: 'Twitter' },
-                    ]}
-                                          query={this.state.query}
-                                          onQueryChange={this.logQuery} />
+                    <QueryBuilderSemantic
+                        fields={[
+                            { value: 'firstName', text: 'First Name' },
+                            { value: 'lastName', text: 'Last Name' },
+                            { value: 'age', text: 'Age' },
+                            { value: 'address', text: 'Address' },
+                            { value: 'phone', text: 'Phone' },
+                            { value: 'email', text: 'Email' },
+                            { value: 'twitter', text: 'Twitter' },
+                        ]}
+                        query={this.state.query}
+                        onQueryChange={this.logQuery} />
                 </div>
                 <div className="shrink query-log scroll">
                     <h4>Human Query String Format</h4>

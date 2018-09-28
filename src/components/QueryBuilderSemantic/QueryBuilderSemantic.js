@@ -1,5 +1,4 @@
 import shortid from 'shortid';
-import cloneDeep from 'lodash/cloneDeep';
 import React from 'react';
 import PropTypes from 'prop-types';
 import RuleGroup from '../RuleGroupSemantic';
@@ -78,10 +77,16 @@ class QueryBuilderSemantic extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        let schema = Object.assign({},{ ...this.state.schema });
+        let schema = Object.assign({}, { ...this.state.schema });
 
-        if (this.props.query !== nextProps.query) {
-            this.setState({ root: Object.assign({}, nextProps.query) });
+        if (_.isNull(this.props.query) && _.isNull(nextProps.query)) {
+            this.setState({ root: this.createRuleGroup() });
+        } else if (_.isNull(this.props.query) && !_.isNull(nextProps.query)) {
+            this.setState({ root: _.cloneDeep(nextProps.query) });
+        } else if (_.isNull(nextProps.query) && !_.isNull(this.props.query)) {
+            this.setState({ root: this.createRuleGroup()  });
+        } else if (!_.isEqual(this.props.query, nextProps.query)) {
+            this.setState({ root: _.cloneDeep(nextProps.query) });
         }
 
         if (schema.fields !== nextProps.fields) {
@@ -114,12 +119,8 @@ class QueryBuilderSemantic extends React.Component {
         });
     }
 
-    componentWillMount() {
-
-    }
-
     getInitialQuery() {
-        return this.props.query || this.createRuleGroup();
+        return this.props.query ? _.cloneDeep(this.props.query) : this.createRuleGroup();
     }
 
     componentDidMount() {
@@ -274,7 +275,6 @@ class QueryBuilderSemantic extends React.Component {
             });
         }
         return foundAtIndex;
-
     }
 
     /**
@@ -299,7 +299,6 @@ class QueryBuilderSemantic extends React.Component {
                 }
             }
         }
-
     }
 
     /**
@@ -316,7 +315,7 @@ class QueryBuilderSemantic extends React.Component {
 
         const { onQueryChange } = this.props;
         if (onQueryChange) {
-            const query = cloneDeep(this.state.root);
+            const query = _.cloneDeep(this.state.root);
             onQueryChange(query);
         }
     }
